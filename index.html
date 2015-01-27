@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html>
+<head>
+	
+</head>
+<!-- TODO:
+	- style
+	- audio-tone
+	- GitHub?
+		- Code-Kommentar-Text
+		- Git-Release?
+ -->
+<body>
+	<!-- The span that displays the countdown; initially it displays zeros everywhere -->
+	<p><span id="counter"></span></p>
+	<!-- The time input fields for hours, minutes and seconds -->
+	<input type="text" id="hours" value="00" />
+	<input type="text" id="minutes" value="00" />
+	<input type="text" id="seconds" value="00" />
+	<!-- The main button which starts, pauses and restarts the timer and the reset button which resets the timer to the first configured time -->
+	<input type="button" id="cDButton" value="Count Down!" onclick="counterButtonClick();" />
+	<input type="button" id="resetButton" value="Reset" onclick="resetCounter();">
+	<script type="text/javascript">
+		// Declaring the main button which is the start, pause and restart button
+		var countDownButton = document.getElementById('cDButton');
+
+		// Declaring the span element so the variable can be used in the functions below instead of the long "document...."-text
+		var countDownSpan = document.getElementById('counter');
+
+		// Setting up global variables, so that all functions can access these variables at all time
+		var hours = 0;
+		var minutes = 0;
+		var seconds = 0;
+		var milis = 0;
+
+		// These variables save the input of the first configured value
+		// useful if the counter gets reseted (the main variables get changed during the count-down-process)
+		var resetHours = 0;
+		var resetMinutes = 0;
+		var resetSeconds = 0;
+
+		// Declaring the audio-file; it gets played when the countdown is finished
+		var audio = new Audio('audio.mp3');
+
+		// Used to pause the "startCounter"-function
+		// If true, the counter stops and does nothing else.
+		var pauseResetControl = 1;
+
+		// Boolean to check whether the timer is already finished or not (needed in the "reset"-function to decide if the zero-values of the time variables come from an empty input or the finished timer)
+		var finishedControl = false;
+
+		// Prints out the current time (should always be 00:00:00.00 at this point) and adds the request to start the counter
+		print(" - Start the Counter!");
+
+		// This function will executed when the "Count Down!"- Button is clicked. It takes the values of the input fields and refer them to the global variables 'hours', 'minutes' and 'seconds'. 'mili' will always have the value 0 at the beginnning (if there is an input like "00000012" the "parseInt"-function will delete these).
+		// The function also checks if the given input is a valid one. If not, the function will set the value of the given input to 0.
+		// At the end of this function the "startCounter"-function will be called with the given values from the input fields
+		function counterButtonClick() {
+			// console.log("Button clicked");
+			hours = parseInt(String(document.getElementById('hours').value));
+			minutes = parseInt(String(document.getElementById('minutes').value));
+			seconds = parseInt(String(document.getElementById('seconds').value));
+			
+			if(inValidInput(hours)) {
+				hours = 0;
+			}
+			if(inValidInput(minutes)) {
+				minutes = 0;
+			}
+			if(inValidInput(seconds)) {
+				seconds = 0;
+			}
+
+			if(hours > 0 || minutes > 0 || seconds > 0 || milis > 0) {
+				pauseResetControl = 1;
+				changeButtonPrefs("Pause", "pauseCounter()");
+				while(seconds >= 60) {
+					seconds -= 60;
+					minutes++;
+				}
+				while(minutes >= 60) {
+					minutes -= 60;
+					hours++;
+				}
+				resetHours = hours;
+				resetMinutes = minutes;
+				resetSeconds = seconds;
+				startCounter(hours, minutes, seconds, 00);
+			}
+		}
+
+		// Checks whether the input is valid or not
+		// returns true, if the input is invalid; otherwise false
+		function inValidInput(number) {
+			if(number == "" || number == null || number == 0 || isNaN(number) || String(number) == "00") {
+				return true;
+			}
+			return false;
+		}
+		
+		// Main-function for the counter
+		// Checks the pauseResetControl-Value first (countdown interrupts if it has the wrong value)
+		// prints "00:00:00.00 - Finished" if the countdown is finished
+		function startCounter(hou, min, sec, mil) {
+			hours = hou;
+			minutes = min;
+			seconds = sec;
+			milis = mil;
+
+			switch (pauseResetControl) {
+				case 0:
+					print(" - Paused!");
+					break;
+				case 3:
+					print(" - Restart the Counter!");
+					break;
+				default:
+					if (milis > 0) {
+						milis--;
+						print("");
+						startNewCount();
+					} else if (!(milis > 0) && seconds > 0) {
+						seconds--;
+						milis = 99;
+						print("");
+						startNewCount();
+					} else if (!(milis > 0) && !(seconds > 0) && minutes > 0) {
+						minutes--;
+						seconds = 59;
+						milis = 99;
+						print("");
+						startNewCount();
+					} else if (!(milis > 0) && !(seconds > 0) && !(minutes > 0) && hours > 0) {
+						hours--;
+						minutes = 59;
+						seconds = 59;
+						milis = 99;
+						print("");
+						startNewCount();
+					} else {
+						finishedControl = true;
+						print(" - Finished!");
+						// audio.play();
+					}
+			}
+		}
+
+		// This function is mainly used to avoid much code-duplication for the "setTimout()"-function
+		function startNewCount() {
+			setTimeout("startCounter(hours, minutes, seconds, milis)", 10);
+		}
+
+		// This functions prints the actual status of the time to the "countDownSpan". It is called by "startCounter"-function in multiple cases
+		function print(additionalText) {
+			countDownSpan.innerText = (addZero(hours) + ":" + addZero(minutes) + ":" + addZero(seconds) + "." + addZero(milis) + additionalText);
+		}
+
+		// This function adds a zero to nnumbers smaller then 10 if they don't already have one.
+		// This is useful for better visibility and a better look of the countdown
+		function addZero(number) {
+			if(!(String(number) == "00" || String(number) == "01" || String(number) == "02" || String(number) == "03" || String(number) == "04" || String(number) == "05" || String(number) == "06" || String(number) == "07" || String(number) == "08" || String(number) == "09") && number < 10) {
+				return "0" + number;
+			};
+			return number;
+		}
+
+		// This function pauses the counter and changes the button-text to "Count Down!" and also changes the onclick-value to the "restartCounter()"-function
+		function pauseCounter() {
+			pauseResetControl = 0;
+			changeButtonPrefs("Count Down!", "restartCounter()");
+		}
+
+		// This function is used to restart the counter with the values at which the counter was paused before
+		// Also changes the button text back to "Pause" and the onclick-value to "pauseCounter()"
+		function restartCounter() {
+			pauseResetControl = 1;
+			changeButtonPrefs("Pause", "pauseCounter()")
+			startCounter(hours, minutes, seconds, milis);
+		}
+
+		// This function resets the countdown to the first configured values and sets the "pauseResetControl"-variable to 3 so the counter stops immediatly
+		// It also changes the button-text to "Count Down!" and the onclick-value to the "counterButtonClick()"-function
+		// All changes are only applied if the counter already started one time
+		function resetCounter() {
+			if(!(hours == 0 && minutes == 0 && seconds == 0 && milis == 0 ) || finishedControl) {
+				hours = addZero(resetHours);
+				minutes = addZero(resetMinutes);
+				seconds = addZero(resetSeconds);
+				milis = 0;
+				pauseResetControl = 3;
+				changeButtonPrefs("Count Down!", "counterButtonClick()");
+			}
+		}
+
+		// This function is a help-function and is mainly used to avoid code-duplication
+		// It changes the text and the onclick-value of the main-button to the values given by the parameters
+		function changeButtonPrefs(buttonText, onClickFunction) {
+			countDownButton.value = buttonText;
+			countDownButton.setAttribute('onclick', onClickFunction + ";");
+		}
+	</script>
+	<hr />
+	<!-- TODO:
+		- comments
+		- setTimeout-alternative
+		- shortcuts
+		- code refactoring
+	 -->
+	<p><span id="stopwatch"></span></p>
+	<p><input type="button" value="Stop Watch!" id="stopWatchButton" onClick="stopwatchButtonClick();" />
+	<input type="button" value="Lap!" id="lapButton" onClick="" />
+	<input type="button" value="Reset" id="resetStopwatch" onClick="resetStopwatch();" /></p>
+	<p><div style="height: 300px; width: 200px; border: 1px solid black; overflow-y:auto"><ul id="lapUl"></ul></div></p>
+	<script type="text/javascript">
+
+		// Comment here
+		var stopWatchButton = document.getElementById('stopWatchButton');
+		// Comment here
+		var stopWatch = document.getElementById('stopwatch');
+
+		// Comment here
+		var lapList = document.getElementById('lapUl');
+
+		// Comment here
+		var sHours = 0;
+		var sMinutes = 0;
+		var sSeconds = 0;
+		var sMilis = 0;
+
+		// Comment here
+		var stopwatchPauseResetControl;
+
+		// Comment here
+		printStopwatch(" - Start the Stopwatch!");
+
+		// Comment here
+		function stopwatchButtonClick() {
+			stopwatchPauseResetControl = 0;
+			stopWatchButton.value = "Pause";
+			stopWatchButton.setAttribute('onclick', "pauseStopwatch()" + ";"); 
+			lapButton.setAttribute('onclick', "printLap()" + ";");
+			startStopwatch(0, 0, 0, 0);
+		}
+
+		// Comment here
+		function startStopwatch(hou, min, sec, mil) {
+			sHours = hou;
+			sMinutes = min;
+			sSeconds = sec;
+			sMilis = mil;
+
+			switch (stopwatchPauseResetControl) {
+				case 1:
+					printStopwatch(" - Paused!");
+					break;
+				case 2:
+					printStopwatch(" - Restart the Stopwatch!");
+					break;
+				default:
+					if (sMilis < 99) {
+						sMilis++;
+						printStopwatch("");
+						startNewStopWatch();
+					} else if (!(sMilis < 99) && sSeconds < 59) {
+						sSeconds++;
+						sMilis = 00;
+						printStopwatch("");
+						startNewStopWatch();
+					} else if (!(sMilis < 99) && !(sSeconds < 59) && sMinutes < 59) {
+						sMinutes++;
+						sSeconds = 00;
+						sMilis = 00;
+						printStopwatch("");
+						startNewStopWatch();
+					} else if (!(sMilis < 99) && !(sSeconds < 59) && !(sMinutes < 59) && sHours < 59) {
+						sHours++;
+						sMinutes = 00;
+						sSeconds = 00;
+						sMilis = 00;
+						printStopwatch("");
+						startNewStopWatch();
+					}
+			}
+		}
+
+		// Comment here
+		function startNewStopWatch() {
+			setTimeout("startStopwatch(sHours, sMinutes, sSeconds, sMilis)", 10);
+		}
+
+		// Comment here
+		function printStopwatch(additionalText) {
+			stopWatch.innerText = addZero(sHours) + ":" + addZero(sMinutes) + ":" + addZero(sSeconds) + "." + addZero(sMilis) + additionalText;
+		}
+
+		// Comment here
+		function pauseStopwatch() {
+			stopwatchPauseResetControl = 1;
+			stopWatchButton.value = "Stop Watch!";
+			stopWatchButton.setAttribute('onclick', "restartStopwatch()" + ";");
+			lapButton.setAttribute('onclick', "");
+		}
+
+		// Comment here
+		function restartStopwatch() {
+			stopwatchPauseResetControl = 0;
+			stopWatchButton.value = "Pause";
+			stopWatchButton.setAttribute('onclick', "pauseStopwatch()" + ";");
+			lapButton.setAttribute('onclick', "printLap()" + ";");
+			startStopwatch(sHours, sMinutes, sSeconds, sMilis);
+		}
+
+		// Comment here
+		function resetStopwatch() {
+			sHours = 0;
+			sMinutes = 0;
+			sSeconds = 0;
+			sMilis = 0;
+			stopwatchPauseResetControl = 2;
+			stopWatchButton.value = "Stop Watch!";
+			stopWatchButton.setAttribute('onclick', "restartStopwatch()" + ";");
+			lapButton.setAttribute('onclick', "");
+			while (lapList.childNodes[0] != null) {
+				lapList.removeChild(lapList.childNodes[0]);
+			}
+			printStopwatch(" - Restart the Stopwatch!");
+		}
+
+		// Comment here
+		function printLap() {
+			var node = document.createElement('li');
+			var textNode = document.createTextNode(addZero(sHours) + ":" + addZero(sMinutes) + ":" + addZero(sSeconds) + "." + addZero(sMilis));
+			node.appendChild(textNode);
+			lapList.insertBefore(node, lapList.childNodes[0]);
+		}
+	</script>
+</body>
+</html>
