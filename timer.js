@@ -1,36 +1,28 @@
 /*
-	TODO:
-	- acutally manipulate DOM
-	- pause-button with https://developer.mozilla.org/en-US/docs/Web/API/WindowTimers/setInterval
-	- countdown-timer
-	- performance improvements?
+  TODO:
+  - stopwatch reset button
+  - timer-lap-logger
+  - countdown-timer
+  - performance improvements?
   - remove ugly getter-'hacks'
 */
 
+// span that contains the stopwatch; will be set at the end of the html document
+var stopwatchTimeDisplay;
+// main stopwatch button; can have value 'start' and 'pause'
+var stopwatchButtonElement;
+
 // returns local offset in ms (as positive value)
-var offset = new Date(Date.now()).getTimezoneOffset();
-function getOffset () {
-	return -(offset * 60 * 1000);
-};
+var offset = -(new Date(Date.now()).getTimezoneOffset() * 60 * 1000);
 
-// unix timestamp when the timer starts
-var startTimestamp = 0;
-function getStartTimestamp () {
-	return startTimestamp;
-};
+// unix timestamp when the stopwatch starts
+var startTimestamp;
 
-var pauseTimestamp = 0;
+// unix timestamp when stopwatch pauses
+var pauseTimestamp;
 
+// time in ms when the stopwatch stopped
 var pauseTime = 0;
-function getPauseTime () {
-  return pauseTime;
-};
-
-// 0 is off; 1 is on; 2 is pause
-var state = 0;
-function getState () {
-	return state;
-};
 
 // zero-fills the *number* to the given *size* (max. 2 leading zeros)
 function zeroPad (number, size) {
@@ -38,38 +30,35 @@ function zeroPad (number, size) {
   return s.substr(s.length-size);
 };
 
-// timerIntervalId is used to identify and stop the interval that is used to update
-// the time span/string
-// it is set in the stopwatchButton function
-var timerIntervalId;
+// stopwatchIntervalId is used to identify and stop the interval that is used
+// to update the time span/string
+// it is set when the interval starts
+var stopwatchIntervalId;
 function stopwatchButton () {
-  // main timer button; can have value 'start' and 'pause'
-  var timerButton = document.getElementById('timerButton');
-
-	if (startTimestamp == 0) {
-		startTimestamp = Date.now();
-	};
-	if (timerIntervalId) {
-    timerButton.value = "Start";
-    window.clearInterval(timerIntervalId);
-    timerIntervalId = false;
+  if (!startTimestamp) {
+    startTimestamp = Date.now();
+  };
+  // decide whether 'start' or 'pause' button was pressed
+  if (stopwatchIntervalId) {
     pauseTimestamp = Date.now();
-	} else {
-    // change button value to 'pause'
-    timerButton.value = "Pause";
-    // starting the refresh interval
-    if (pauseTimestamp > 0) {
+    window.clearInterval(stopwatchIntervalId);
+    stopwatchButtonElement.value = "Start";
+    stopwatchIntervalId = false;
+  } else {
+    // set everything to pause and log pause time
+    stopwatchButtonElement.value = "Pause";
+    if (pauseTimestamp) {
       pauseTime += Date.now() - pauseTimestamp;
       pauseTimestamp = 0;
     };
-		timerIntervalId = window.setInterval(function () {
-      var timeDisplay = document.getElementById('stopwatch');
-			var timeSinceStart = (Date.now() - getStartTimestamp() - getOffset()) - getPauseTime();
-			var date = new Date(timeSinceStart);
-			timeDisplay.innerHTML = zeroPad(date.getHours(), 2)
-				+ ':' + zeroPad(date.getMinutes(), 2)
-				+ ':' + zeroPad(date.getSeconds(), 2)
-				+ ':' + zeroPad(date.getMilliseconds(), 3);
-		}, 100);
-	};
+    // starting the refresh interval
+    stopwatchIntervalId = window.setInterval(function () {
+      var timeSinceStart = (Date.now() - startTimestamp - offset) - pauseTime;
+      var date = new Date(timeSinceStart);
+      stopwatchTimeDisplay.innerHTML = zeroPad(date.getHours(), 2)
+        + ':' + zeroPad(date.getMinutes(), 2)
+        + ':' + zeroPad(date.getSeconds(), 2)
+        + ':' + zeroPad(date.getMilliseconds(), 3);
+    }, 100);
+  };
 };
