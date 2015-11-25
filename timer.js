@@ -1,6 +1,5 @@
 /*
   TODO:
-  - timer-lap-logger
   - refactoring
   - countdown-timer
   - refactoring
@@ -13,6 +12,12 @@ var stopwatchTimeDisplay;
 
 // main stopwatch button; can have value 'start' and 'pause'
 var stopwatchStartButton;
+
+// stopwatch lap button; print the lap time to the log div
+var stopwatchLapButton;
+
+// logging div for laps
+var lapLog;
 
 // returns local offset in ms (as positive value)
 var offset = -(new Date(Date.now()).getTimezoneOffset() * 60 * 1000);
@@ -53,7 +58,7 @@ function startPauseStopwatch () {
     stopwatchStartButton.value = "Pause";
     if (pauseTimestamp) {
       pauseTime += Date.now() - pauseTimestamp;
-      pauseTimestamp = 0;
+      pauseTimestamp = null;
     };
     // starting the refresh interval
     stopwatchIntervalId = window.setInterval(function () {
@@ -78,5 +83,22 @@ function resetStopwatch () {
     pauseTime = 0;
     stopwatchTimeDisplay.innerHTML = "00:00:00:000";
     stopwatchStartButton.value = "Start";
+    lapLog.innerHTML = "";
+  };
+};
+
+// prints the lap time to the logging div
+// only works when timer were already started
+function logLap () {
+  if (startTimestamp && !pauseTimestamp) {
+    var timeSinceStart = (Date.now() - startTimestamp - offset) - pauseTime;
+    var date = new Date(timeSinceStart);
+    var listNode = document.createElement('li');
+    var lapTime = document.createTextNode(zeroPad(date.getHours(), 2)
+      + ':' + zeroPad(date.getMinutes(), 2)
+      + ':' + zeroPad(date.getSeconds(), 2)
+      + ':' + zeroPad(date.getMilliseconds(), 3));
+    listNode.appendChild(lapTime);
+    lapLog.insertBefore(listNode, lapLog.childNodes[0]);
   };
 };

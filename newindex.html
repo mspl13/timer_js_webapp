@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>timer-js</title>
+	<title>timer_js</title>
 	<script type="text/javascript" src="timer.js"></script>
 </head>
 <body>
@@ -9,14 +9,19 @@
 	<!-- The main button which starts, pauses and restarts the stopwatch and the reset button which resets the stopwatch -->
 	<input type="button" id="stopwatchStartButton" value="Start" onclick="" />
 	<input type="button" id="stopwatchResetButton" value="Reset" onclick="">
+	<input type="button" id="stopwatchLapButton" value="Lap" onclick="">
+	<p><div style="height: 200px; width: 200px; border: 1px solid black; overflow-y:auto"><ul id="lapLog"></ul></div></p>
 	<script type="text/javascript">
 		// assign all DOM elements to variables so they can be used in main javascript
 		var stopwatchTimeDisplay = document.getElementById('stopwatch');
   		var stopwatchStartButton = document.getElementById('stopwatchStartButton');
   		var stopwatchResetButton = document.getElementById('stopwatchResetButton');
+  		var stopwatchLapButton = document.getElementById('stopwatchLapButton')
+  		var lapLog = document.getElementById('lapLog');
   		// assign onclick functions to buttons when everything else is finished
 		stopwatchStartButton.setAttribute('onclick', 'startPauseStopwatch();');
 		stopwatchResetButton.setAttribute('onclick', 'resetStopwatch();')
+		stopwatchLapButton.setAttribute('onclick',' logLap();');
 	</script>
 </body>
 </html>
