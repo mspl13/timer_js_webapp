@@ -1,10 +1,13 @@
 /*
   TODO:
   - stopwatch reset button
+  - refactoring
   - timer-lap-logger
+  - refactoring
   - countdown-timer
+  - refactoring
   - performance improvements?
-  - remove ugly getter-'hacks'
+  - refactoring
 */
 
 // span that contains the stopwatch; will be set at the end of the html document
