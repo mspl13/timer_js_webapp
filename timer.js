@@ -1,7 +1,5 @@
 /*
   TODO:
-  - stopwatch reset button
-  - refactoring
   - timer-lap-logger
   - refactoring
   - countdown-timer
@@ -28,16 +26,18 @@ var pauseTimestamp;
 // time in ms when the stopwatch stopped
 var pauseTime = 0;
 
+// stopwatchIntervalId is used to identify and stop the interval that is used
+// to update the time span/string
+// it is set when the interval starts
+var stopwatchIntervalId;
+
 // zero-fills the *number* to the given *size* (max. 2 leading zeros)
 function zeroPad (number, size) {
   var s = "00" + number;
   return s.substr(s.length-size);
 };
 
-// stopwatchIntervalId is used to identify and stop the interval that is used
-// to update the time span/string
-// it is set when the interval starts
-var stopwatchIntervalId;
+// starts/pauses the timer depending on actual state
 function startPauseStopwatch () {
   if (!startTimestamp) {
     startTimestamp = Date.now();
@@ -67,6 +67,8 @@ function startPauseStopwatch () {
   };
 };
 
+// function to reset the stopwatch to zero so that a new timer can be started
+// only works when the timer were already started
 function resetStopwatch () {
   if (startTimestamp) {
     window.clearInterval(stopwatchIntervalId);
