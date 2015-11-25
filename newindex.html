@@ -7,12 +7,14 @@
 <body>
 	<p><span id="stopwatch">00:00:00:000</span></p>
 	<!-- The main button which starts, pauses and restarts the stopwatch and the reset button which resets the stopwatch -->
-	<input type="button" id="stopwatchButton" value="Start" onclick="" />
-	<!-- <input type="button" id="resetButton" value="Reset" onclick="console.log('todo');"> -->
+	<input type="button" id="stopwatchStartButton" value="Start" onclick="" />
+	<input type="button" id="stopwatchResetButton" value="Reset" onclick="">
 	<script type="text/javascript">
 		var stopwatchTimeDisplay = document.getElementById('stopwatch');
-  		var stopwatchButtonElement = document.getElementById('stopwatchButton');
-		document.getElementById('stopwatchButton').setAttribute('onclick', 'stopwatchButton();');
+  		var stopwatchStartButton = document.getElementById('stopwatchStartButton');
+  		var stopwatchResetButton = document.getElementById('stopwatchResetButton');
+		stopwatchStartButton.setAttribute('onclick', 'startPauseStopwatch();');
+		stopwatchResetButton.setAttribute('onclick', 'resetStopwatch();')
 	</script>
 </body>
 </html>

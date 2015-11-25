@@ -12,8 +12,9 @@
 
 // span that contains the stopwatch; will be set at the end of the html document
 var stopwatchTimeDisplay;
+
 // main stopwatch button; can have value 'start' and 'pause'
-var stopwatchButtonElement;
+var stopwatchStartButton;
 
 // returns local offset in ms (as positive value)
 var offset = -(new Date(Date.now()).getTimezoneOffset() * 60 * 1000);
@@ -37,7 +38,7 @@ function zeroPad (number, size) {
 // to update the time span/string
 // it is set when the interval starts
 var stopwatchIntervalId;
-function stopwatchButton () {
+function startPauseStopwatch () {
   if (!startTimestamp) {
     startTimestamp = Date.now();
   };
@@ -45,11 +46,11 @@ function stopwatchButton () {
   if (stopwatchIntervalId) {
     pauseTimestamp = Date.now();
     window.clearInterval(stopwatchIntervalId);
-    stopwatchButtonElement.value = "Start";
-    stopwatchIntervalId = false;
+    stopwatchStartButton.value = "Start";
+    stopwatchIntervalId = null;
   } else {
     // set everything to pause and log pause time
-    stopwatchButtonElement.value = "Pause";
+    stopwatchStartButton.value = "Pause";
     if (pauseTimestamp) {
       pauseTime += Date.now() - pauseTimestamp;
       pauseTimestamp = 0;
@@ -63,5 +64,17 @@ function stopwatchButton () {
         + ':' + zeroPad(date.getSeconds(), 2)
         + ':' + zeroPad(date.getMilliseconds(), 3);
     }, 100);
+  };
+};
+
+function resetStopwatch () {
+  if (startTimestamp) {
+    window.clearInterval(stopwatchIntervalId);
+    stopwatchIntervalId = null;
+    startTimestamp = null;
+    pauseTimestamp = null;
+    pauseTime = 0;
+    stopwatchTimeDisplay.innerHTML = "00:00:00:000";
+    stopwatchStartButton.value = "Start";
   };
 };
