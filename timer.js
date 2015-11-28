@@ -42,6 +42,15 @@ function zeroPad (number, size) {
   return s.substr(s.length-size);
 };
 
+// returns the time as a string in the format hh:MM:ss:mmm
+function getTimeString (timestamp) {
+  var date = new Date(timestamp);
+  return zeroPad(date.getHours(), 2)
+    + ':' + zeroPad(date.getMinutes(), 2)
+    + ':' + zeroPad(date.getSeconds(), 2)
+    + ':' + zeroPad(date.getMilliseconds(), 3);
+};
+
 // starts/pauses the timer depending on actual state
 function startPauseStopwatch () {
   if (!startTimestamp) {
@@ -63,11 +72,7 @@ function startPauseStopwatch () {
     // starting the refresh interval
     stopwatchIntervalId = window.setInterval(function () {
       var timeSinceStart = (Date.now() - startTimestamp - offset) - pauseTime;
-      var date = new Date(timeSinceStart);
-      stopwatchTimeDisplay.innerHTML = zeroPad(date.getHours(), 2)
-        + ':' + zeroPad(date.getMinutes(), 2)
-        + ':' + zeroPad(date.getSeconds(), 2)
-        + ':' + zeroPad(date.getMilliseconds(), 3);
+      stopwatchTimeDisplay.innerHTML = getTimeString(timeSinceStart);
     }, 100);
   };
 };
@@ -92,12 +97,8 @@ function resetStopwatch () {
 function logLap () {
   if (startTimestamp && !pauseTimestamp) {
     var timeSinceStart = (Date.now() - startTimestamp - offset) - pauseTime;
-    var date = new Date(timeSinceStart);
     var listNode = document.createElement('li');
-    var lapTime = document.createTextNode(zeroPad(date.getHours(), 2)
-      + ':' + zeroPad(date.getMinutes(), 2)
-      + ':' + zeroPad(date.getSeconds(), 2)
-      + ':' + zeroPad(date.getMilliseconds(), 3));
+    var lapTime = document.createTextNode(getTimeString(timeSinceStart));
     listNode.appendChild(lapTime);
     lapLog.insertBefore(listNode, lapLog.childNodes[0]);
   };
