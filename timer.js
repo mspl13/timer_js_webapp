@@ -19,9 +19,6 @@ var stopwatchLapButton;
 // logging div for laps
 var lapLog;
 
-// returns local offset in ms (as positive value)
-var offset = -(new Date(Date.now()).getTimezoneOffset() * 60 * 1000);
-
 // unix timestamp when the stopwatch starts
 var startTimestamp;
 
@@ -43,12 +40,14 @@ function zeroPad (number, size) {
 };
 
 // returns the time as a string in the format hh:MM:ss:mmm
-function getTimeString (timestamp) {
+// UTC time is used to prevent timezone errors
+function getCurrentTimeString () {
+  var timestamp = (Date.now() - startTimestamp) - pauseTime;
   var date = new Date(timestamp);
-  return zeroPad(date.getHours(), 2)
-    + ':' + zeroPad(date.getMinutes(), 2)
-    + ':' + zeroPad(date.getSeconds(), 2)
-    + ':' + zeroPad(date.getMilliseconds(), 3);
+  return zeroPad(date.getUTCHours(), 2)
+    + ':' + zeroPad(date.getUTCMinutes(), 2)
+    + ':' + zeroPad(date.getUTCSeconds(), 2)
+    + ':' + zeroPad(date.getUTCMilliseconds(), 3);
 };
 
 // starts/pauses the timer depending on actual state
@@ -71,9 +70,8 @@ function startPauseStopwatch () {
     };
     // starting the refresh interval
     stopwatchIntervalId = window.setInterval(function () {
-      var timeSinceStart = (Date.now() - startTimestamp - offset) - pauseTime;
-      stopwatchTimeDisplay.innerHTML = getTimeString(timeSinceStart);
-    }, 100);
+      stopwatchTimeDisplay.innerHTML = getCurrentTimeString();
+    }, 75);
   };
 };
 
@@ -96,9 +94,8 @@ function resetStopwatch () {
 // only works when timer were already started
 function logLap () {
   if (startTimestamp && !pauseTimestamp) {
-    var timeSinceStart = (Date.now() - startTimestamp - offset) - pauseTime;
     var listNode = document.createElement('li');
-    var lapTime = document.createTextNode(getTimeString(timeSinceStart));
+    var lapTime = document.createTextNode(getCurrentTimeString());
     listNode.appendChild(lapTime);
     lapLog.insertBefore(listNode, lapLog.childNodes[0]);
   };
