@@ -1,7 +1,5 @@
 /*
   TODO:
-  - timer-lap-logger
-  - refactoring
   - countdown-timer
   - refactoring
   - performance improvements?
@@ -14,8 +12,8 @@ var stopwatchTimeDisplay;
 // main stopwatch button; can have value 'start' and 'pause'
 var stopwatchStartButton;
 
-// returns local offset in ms (as positive value)
-var offset = -(new Date(Date.now()).getTimezoneOffset() * 60 * 1000);
+// logging div for laps
+var lapLog;
 
 // unix timestamp when the stopwatch starts
 var startTimestamp;
@@ -37,6 +35,16 @@ function zeroPad (number, size) {
   return s.substr(s.length-size);
 };
 
+// returns the time as a string in the format hh:MM:ss:mmm
+// UTC time is used to prevent timezone errors
+function getCurrentTimeString () {
+  var date = new Date((Date.now() - startTimestamp) - pauseTime);
+  return zeroPad(date.getUTCHours(), 2)
+    + ':' + zeroPad(date.getUTCMinutes(), 2)
+    + ':' + zeroPad(date.getUTCSeconds(), 2)
+    + ':' + zeroPad(date.getUTCMilliseconds(), 3);
+};
+
 // starts/pauses the timer depending on actual state
 function startPauseStopwatch () {
   if (!startTimestamp) {
@@ -53,17 +61,12 @@ function startPauseStopwatch () {
     stopwatchStartButton.value = "Pause";
     if (pauseTimestamp) {
       pauseTime += Date.now() - pauseTimestamp;
-      pauseTimestamp = 0;
+      pauseTimestamp = null;
     };
     // starting the refresh interval
     stopwatchIntervalId = window.setInterval(function () {
-      var timeSinceStart = (Date.now() - startTimestamp - offset) - pauseTime;
-      var date = new Date(timeSinceStart);
-      stopwatchTimeDisplay.innerHTML = zeroPad(date.getHours(), 2)
-        + ':' + zeroPad(date.getMinutes(), 2)
-        + ':' + zeroPad(date.getSeconds(), 2)
-        + ':' + zeroPad(date.getMilliseconds(), 3);
-    }, 100);
+      stopwatchTimeDisplay.innerHTML = getCurrentTimeString();
+    }, 75);
   };
 };
 
@@ -78,5 +81,17 @@ function resetStopwatch () {
     pauseTime = 0;
     stopwatchTimeDisplay.innerHTML = "00:00:00:000";
     stopwatchStartButton.value = "Start";
+    lapLog.innerHTML = "";
+  };
+};
+
+// prints the lap time to the logging div
+// only works when timer were already started
+function logLap () {
+  if (startTimestamp && !pauseTimestamp) {
+    var listNode = document.createElement('li');
+    var lapTime = document.createTextNode(getCurrentTimeString());
+    listNode.appendChild(lapTime);
+    lapLog.insertBefore(listNode, lapLog.childNodes[0]);
   };
 };
