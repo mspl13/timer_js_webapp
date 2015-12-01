@@ -21,9 +21,6 @@ var startTimestamp;
 // unix timestamp when stopwatch pauses
 var pauseTimestamp;
 
-// time in ms when the stopwatch stopped
-var pauseTime = 0;
-
 // stopwatchIntervalId is used to identify and stop the interval that is used
 // to update the time span/string
 // it is set when the interval starts
@@ -38,7 +35,7 @@ function zeroPad (number, size) {
 // returns the time as a string in the format hh:MM:ss:mmm
 // UTC time is used to prevent timezone errors
 function getCurrentTimeString () {
-  var date = new Date((Date.now() - startTimestamp) - pauseTime);
+  var date = new Date(Date.now() - startTimestamp);
   return zeroPad(date.getUTCHours(), 2)
     + ':' + zeroPad(date.getUTCMinutes(), 2)
     + ':' + zeroPad(date.getUTCSeconds(), 2)
@@ -60,7 +57,7 @@ function startPauseStopwatch () {
     // set everything to pause and log pause time
     stopwatchStartButton.value = "Pause";
     if (pauseTimestamp) {
-      pauseTime += Date.now() - pauseTimestamp;
+      startTimestamp += Date.now() - pauseTimestamp;
       pauseTimestamp = null;
     };
     // starting the refresh interval
@@ -78,7 +75,6 @@ function resetStopwatch () {
     stopwatchIntervalId = null;
     startTimestamp = null;
     pauseTimestamp = null;
-    pauseTime = 0;
     stopwatchTimeDisplay.innerHTML = "00:00:00:000";
     stopwatchStartButton.value = "Start";
     lapLog.innerHTML = "";
