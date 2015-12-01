@@ -1,6 +1,5 @@
 /*
   TODO:
-  - refactoring
   - countdown-timer
   - refactoring
   - performance improvements?
@@ -12,9 +11,6 @@ var stopwatchTimeDisplay;
 
 // main stopwatch button; can have value 'start' and 'pause'
 var stopwatchStartButton;
-
-// stopwatch lap button; print the lap time to the log div
-var stopwatchLapButton;
 
 // logging div for laps
 var lapLog;
@@ -42,8 +38,7 @@ function zeroPad (number, size) {
 // returns the time as a string in the format hh:MM:ss:mmm
 // UTC time is used to prevent timezone errors
 function getCurrentTimeString () {
-  var timestamp = (Date.now() - startTimestamp) - pauseTime;
-  var date = new Date(timestamp);
+  var date = new Date((Date.now() - startTimestamp) - pauseTime);
   return zeroPad(date.getUTCHours(), 2)
     + ':' + zeroPad(date.getUTCMinutes(), 2)
     + ':' + zeroPad(date.getUTCSeconds(), 2)

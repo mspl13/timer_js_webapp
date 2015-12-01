@@ -16,12 +16,11 @@
 		var stopwatchTimeDisplay = document.getElementById('stopwatch');
   		var stopwatchStartButton = document.getElementById('stopwatchStartButton');
   		var stopwatchResetButton = document.getElementById('stopwatchResetButton');
-  		var stopwatchLapButton = document.getElementById('stopwatchLapButton')
   		var lapLog = document.getElementById('lapLog');
   		// assign onclick functions to buttons when everything else is finished
 		stopwatchStartButton.setAttribute('onclick', 'startPauseStopwatch();');
-		stopwatchResetButton.setAttribute('onclick', 'resetStopwatch();')
-		stopwatchLapButton.setAttribute('onclick',' logLap();');
+		stopwatchResetButton.setAttribute('onclick', 'resetStopwatch();');
+		document.getElementById('stopwatchLapButton').setAttribute('onclick',' logLap();');
 	</script>
 </body>
 </html>
