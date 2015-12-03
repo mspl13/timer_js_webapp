@@ -1,11 +1,12 @@
 /*
   TODO:
-  - countdown-timer
   - refactoring
   - performance improvements?
   - refactoring
 */
 
+// --------------------------------------------------
+// stopwatch
 // span that contains the stopwatch; will be set at the end of the html document
 var stopwatchTimeDisplay;
 
@@ -34,15 +35,15 @@ function zeroPad (number, size) {
 
 // returns the time as a string in the format hh:MM:ss:mmm
 // UTC time is used to prevent timezone errors
-function getCurrentTimeString () {
-  var date = new Date(Date.now() - startTimestamp);
+function getCurrentTimeString (timestamp) {
+  var date = new Date(timestamp);
   return zeroPad(date.getUTCHours(), 2)
     + ':' + zeroPad(date.getUTCMinutes(), 2)
     + ':' + zeroPad(date.getUTCSeconds(), 2)
     + ':' + zeroPad(date.getUTCMilliseconds(), 3);
 };
 
-// starts/pauses the timer depending on actual state
+// starts/pauses the stopwatch depending on actual state
 function startPauseStopwatch () {
   if (!startTimestamp) {
     startTimestamp = Date.now();
@@ -62,13 +63,15 @@ function startPauseStopwatch () {
     };
     // starting the refresh interval
     stopwatchIntervalId = window.setInterval(function () {
-      stopwatchTimeDisplay.innerHTML = getCurrentTimeString();
+      stopwatchTimeDisplay.innerHTML = getCurrentTimeString(
+        Date.now() - startTimestamp);
     }, 75);
   };
 };
 
-// function to reset the stopwatch to zero so that a new timer can be started
-// only works when the timer were already started
+// function to reset the stopwatch to zero so that a new stopwatch can be
+// started
+// only works when the stopwatch were already started
 function resetStopwatch () {
   if (startTimestamp) {
     window.clearInterval(stopwatchIntervalId);
@@ -82,12 +85,77 @@ function resetStopwatch () {
 };
 
 // prints the lap time to the logging div
-// only works when timer were already started
+// only works when stopwatch were already started and is not paused
 function logLap () {
   if (startTimestamp && !pauseTimestamp) {
     var listNode = document.createElement('li');
-    var lapTime = document.createTextNode(getCurrentTimeString());
+    var lapTime = document.createTextNode(getCurrentTimeString(
+      Date.now() - startTimestamp));
     listNode.appendChild(lapTime);
     lapLog.insertBefore(listNode, lapLog.childNodes[0]);
+  };
+};
+
+
+// --------------------------------------------------
+// countdown
+// span that contains the countdown; will be set at the end of the html document
+var countdownTimeDisplay;
+
+// main stopwatch button; can have value 'start' and 'pause'
+var countdownStartButton;
+
+// unix timestamp when the countdown should be finished
+var countdownFinishTimestamp;
+
+// unix timestamp when countdown pauses
+var countdownPauseTimestamp;
+
+// countdownIntervallId is used to identify and stop the interval that is used
+// to update the time span/string
+// it is set when the interval starts
+var countdownIntervallId;
+
+// starts/pauses the countdown depending on actual state
+function startPauseCountdown () {
+  var countdownTime = document.getElementById('secondsInput').value * 1000
+    + document.getElementById('minutesInput').value * 60 * 1000
+    + document.getElementById('hoursInput').value * 60 * 60 * 1000;
+  if (!countdownFinishTimestamp && countdownTime > 0) {
+    countdownFinishTimestamp = Date.now() + countdownTime;
+  };
+  if (countdownIntervallId) {
+    countdownPauseTimestamp = Date.now();
+    window.clearInterval(countdownIntervallId);
+    countdownStartButton.value = "Start";
+    countdownIntervallId = null;
+  } else if (countdownTime > 0) {
+    countdownStartButton.value = "Pause";
+    if (countdownPauseTimestamp) {
+      countdownFinishTimestamp += Date.now() - countdownPauseTimestamp;
+      countdownPauseTimestamp = null;
+    };
+    countdownIntervallId = window.setInterval(function () {
+      var timestamp = countdownFinishTimestamp - Date.now();
+      if (timestamp > 0) {
+        countdownTimeDisplay.innerHTML = getCurrentTimeString(timestamp);
+      } else {
+        resetCountdown();
+      };
+    }, 75);
+  };
+};
+
+// function to reset the countdown to zero so that a new countdown can be
+// started
+// only works when the countdown were already started
+function resetCountdown () {
+  if (countdownFinishTimestamp) {
+    window.clearInterval(countdownIntervallId);
+    countdownIntervallId = null;
+    countdownStartButton.value = "Start";
+    countdownTimeDisplay.innerHTML = "00:00:00:000";
+    countdownFinishTimestamp = null;
+    countdownPauseTimestamp = null;
   };
 };
