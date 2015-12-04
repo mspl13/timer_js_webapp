@@ -17,10 +17,10 @@ var stopwatchStartButton;
 var lapLog;
 
 // unix timestamp when the stopwatch starts
-var startTimestamp;
+var stopwatchStartTimestamp;
 
 // unix timestamp when stopwatch pauses
-var pauseTimestamp;
+var stopwatchPauseTimestamp;
 
 // stopwatchIntervalId is used to identify and stop the interval that is used
 // to update the time span/string
@@ -45,26 +45,26 @@ function getCurrentTimeString (timestamp) {
 
 // starts/pauses the stopwatch depending on actual state
 function startPauseStopwatch () {
-  if (!startTimestamp) {
-    startTimestamp = Date.now();
+  if (!stopwatchStartTimestamp) {
+    stopwatchStartTimestamp = Date.now();
   };
   // decide whether 'start' or 'pause' button was pressed
   if (stopwatchIntervalId) {
-    pauseTimestamp = Date.now();
+    stopwatchPauseTimestamp = Date.now();
     window.clearInterval(stopwatchIntervalId);
     stopwatchStartButton.value = "Start";
     stopwatchIntervalId = null;
   } else {
     // set everything to pause and log pause time
     stopwatchStartButton.value = "Pause";
-    if (pauseTimestamp) {
-      startTimestamp += Date.now() - pauseTimestamp;
-      pauseTimestamp = null;
+    if (stopwatchPauseTimestamp) {
+      stopwatchStartTimestamp += Date.now() - stopwatchPauseTimestamp;
+      stopwatchPauseTimestamp = null;
     };
     // starting the refresh interval
     stopwatchIntervalId = window.setInterval(function () {
       stopwatchTimeDisplay.innerHTML = getCurrentTimeString(
-        Date.now() - startTimestamp);
+        Date.now() - stopwatchStartTimestamp);
     }, 75);
   };
 };
@@ -73,11 +73,11 @@ function startPauseStopwatch () {
 // started
 // only works when the stopwatch were already started
 function resetStopwatch () {
-  if (startTimestamp) {
+  if (stopwatchStartTimestamp) {
     window.clearInterval(stopwatchIntervalId);
     stopwatchIntervalId = null;
-    startTimestamp = null;
-    pauseTimestamp = null;
+    stopwatchStartTimestamp = null;
+    stopwatchPauseTimestamp = null;
     stopwatchTimeDisplay.innerHTML = "00:00:00:000";
     stopwatchStartButton.value = "Start";
     lapLog.innerHTML = "";
@@ -87,15 +87,14 @@ function resetStopwatch () {
 // prints the lap time to the logging div
 // only works when stopwatch were already started and is not paused
 function logLap () {
-  if (startTimestamp && !pauseTimestamp) {
+  if (stopwatchStartTimestamp && !stopwatchPauseTimestamp) {
     var listNode = document.createElement('li');
     var lapTime = document.createTextNode(getCurrentTimeString(
-      Date.now() - startTimestamp));
+      Date.now() - stopwatchStartTimestamp));
     listNode.appendChild(lapTime);
     lapLog.insertBefore(listNode, lapLog.childNodes[0]);
   };
 };
-
 
 // --------------------------------------------------
 // countdown
@@ -129,8 +128,9 @@ function startPauseCountdown () {
     window.clearInterval(countdownIntervallId);
     countdownStartButton.value = "Start";
     countdownIntervallId = null;
-  } else if (countdownTime > 0) {
+  } else if (countdownFinishTimestamp) {
     countdownStartButton.value = "Pause";
+    // add pause time to finish time if available
     if (countdownPauseTimestamp) {
       countdownFinishTimestamp += Date.now() - countdownPauseTimestamp;
       countdownPauseTimestamp = null;
