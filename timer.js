@@ -1,10 +1,3 @@
-/*
-  TODO:
-  - refactoring
-  - performance improvements?
-  - refactoring
-*/
-
 // --------------------------------------------------
 // stopwatch
 // span that contains the stopwatch; will be set at the end of the html document
