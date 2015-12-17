@@ -2,12 +2,40 @@
 <html>
 <head>
     <title>timer_js</title>
+    <link rel="stylesheet" type="text/css" href="style.css">
     <script type="text/javascript" src="timer.js"></script>
 </head>
 <body>
-    <h1>Stopwatch</h1>
+    <div class="container">
+        <div class="menu">
+            <div class="menu__tab-wrapper">
+                 <div class="menu__tab menu__tab--active">
+                    Stopwatch
+                </div>
+                <div class="menu__tab">
+                    Countdown
+                </div>
+            </div>
+        </div>
+        <div class="time-view">
+            <span class="time-view__hours">00</span>
+            <span class="time-view__minutes">:00</span>
+            <span class="time-view__seconds">:00</span>
+            <span class="time-view__milliseconds">.000</span>
+        </div>
+        <div class="controls">
+            <div class="controls controls__button-wrapper">
+                <div class="controls__button">
+                    Start/Pause
+                </div>
+                <div class="controls__button">
+                    Reset/Lap
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- <h1>Stopwatch</h1>
     <p><span id="stopwatch">00:00:00:000</span></p>
-    <!-- The main button which starts, pauses and restarts the stopwatch and the reset button which resets the stopwatch -->
     <input type="button" id="stopwatchStartButton" value="Start" onclick="" />
     <input type="button" id="stopwatchResetButton" value="Reset" onclick="" />
     <input type="button" id="stopwatchLapButton" value="Lap" onclick="" />
@@ -23,23 +51,23 @@
     <input type="text" id="minutesInput" value="00" />
     <input type="text" id="secondsInput" value="00" />
     <input type="button" id="countdownStartButton" value="Start" onclick="" />
-    <input type="button" id="countdownResetButton" value="Reset" onclick="" />
+    <input type="button" id="countdownResetButton" value="Reset" onclick="" /> -->
     <script type="text/javascript">
-        // stopwatch
-        // assign all DOM elements to variables so they can be used in main javascript
-        stopwatchTimeDisplay = document.getElementById('stopwatch');
-        stopwatchStartButton = document.getElementById('stopwatchStartButton');
-        lapLog = document.getElementById('lapLog');
-        // assign onclick functions to buttons when everything else is finished
-        stopwatchStartButton.setAttribute('onclick', 'startPauseStopwatch();');
-        document.getElementById('stopwatchResetButton').setAttribute('onclick', 'resetStopwatch();');
-        document.getElementById('stopwatchLapButton').setAttribute('onclick',' logLap();');
+    //     // stopwatch
+    //     // assign all DOM elements to variables so they can be used in main javascript
+    //     stopwatchTimeDisplay = document.getElementById('stopwatch');
+    //     stopwatchStartButton = document.getElementById('stopwatchStartButton');
+    //     lapLog = document.getElementById('lapLog');
+    //     // assign onclick functions to buttons when everything else is finished
+    //     stopwatchStartButton.setAttribute('onclick', 'startPauseStopwatch();');
+    //     document.getElementById('stopwatchResetButton').setAttribute('onclick', 'resetStopwatch();');
+    //     document.getElementById('stopwatchLapButton').setAttribute('onclick',' logLap();');
 
-        // countdown
-        countdownStartButton = document.getElementById('countdownStartButton');
-        countdownTimeDisplay = document.getElementById('countdown');
-        countdownStartButton.setAttribute('onclick', 'startPauseCountdown();');
-        document.getElementById('countdownResetButton').setAttribute('onclick', 'resetCountdown();');
+    //     // countdown
+    //     countdownStartButton = document.getElementById('countdownStartButton');
+    //     countdownTimeDisplay = document.getElementById('countdown');
+    //     countdownStartButton.setAttribute('onclick', 'startPauseCountdown();');
+    //     document.getElementById('countdownResetButton').setAttribute('onclick', 'resetCountdown();');
     </script>
 </body>
 </html>

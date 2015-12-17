@@ -1,0 +1,69 @@
+body, html {
+	margin: 0px;
+	padding: 0px;
+	background-color: #FAFAFA;
+}
+
+.menu {
+	background-color: #EEE;
+	margin-bottom: 30px;
+}
+
+.menu__tab-wrapper {
+	max-width: 500px;
+	display: flex;
+	margin: 0px auto
+}
+
+.menu__tab {
+	flex: 1;
+	padding: 1em;
+	text-align: center;
+	cursor: pointer;
+}
+
+.menu__tab:hover {
+	background-color: #CCC;
+}
+
+.menu__tab--active {
+	box-shadow:inset 0px -5px 0px #CCC;
+	-webkit-box-shadow:inset 0px -5px 0px #CCC;
+    -moz-box-shadow:inset 0px -5px 0px #CCC;
+}
+
+.time-view {
+	margin-bottom: 30px;
+	padding: 4em 0em 4em 0em;
+	text-align: center;
+	background-color: #EEE;
+}
+
+.time-view__hours, .time-view__minutes, .time-view__seconds {
+	font-size: 3em;
+}
+
+.time-view__milliseconds {
+	font-size: 1.5em;
+}
+
+.controls {
+	background-color: #EEE;
+}
+
+.controls__button-wrapper {
+	max-width: 500px;
+	display: flex;
+	margin: 0px auto;
+}
+
+.controls__button {
+	flex: 1;
+	padding: 1em;
+	text-align: center;
+	cursor: pointer;
+}
+
+.controls__button:hover {
+	background-color: #CCC;
+}
