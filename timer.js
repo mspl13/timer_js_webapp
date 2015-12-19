@@ -10,10 +10,14 @@ function changeTimeDisplayTo (mode) {
     case 'stopwatch':
       countdownTab.classList.remove(menuTabActiveClass);
       stopwatchTab.classList.add(menuTabActiveClass);
+      countdownTab.setAttribute('onclick', 'changeTimeDisplayTo("countdown");');
+      stopwatchTab.removeAttribute('onclick');
       break;
     case 'countdown':
       stopwatchTab.classList.remove(menuTabActiveClass);
       countdownTab.classList.add(menuTabActiveClass);
+      stopwatchTab.setAttribute('onclick', 'changeTimeDisplayTo("stopwatch");');
+      countdownTab.removeAttribute('onclick');
       break;
     default:
       console.error('No mode to switch to...');
