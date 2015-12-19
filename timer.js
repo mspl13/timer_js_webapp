@@ -1,4 +1,26 @@
 // --------------------------------------------------
+// menu tabs
+var stopwatchTab;
+var countdownTab;
+
+function changeTimeDisplayTo (mode) {
+  var menuTabActiveClass = 'menu__tab--active';
+
+  switch (mode) {
+    case 'stopwatch':
+      countdownTab.classList.remove(menuTabActiveClass);
+      stopwatchTab.classList.add(menuTabActiveClass);
+      break;
+    case 'countdown':
+      stopwatchTab.classList.remove(menuTabActiveClass);
+      countdownTab.classList.add(menuTabActiveClass);
+      break;
+    default:
+      console.error('No mode to switch to...');
+  };
+};
+
+// --------------------------------------------------
 // stopwatch
 // span that contains the stopwatch; will be set at the end of the html document
 var stopwatchTimeDisplay;
