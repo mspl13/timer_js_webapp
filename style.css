@@ -34,7 +34,7 @@ body, html {
 
 .time-view {
 	margin-bottom: 30px;
-	padding: 4em 0em 4em 0em;
+	padding: 4em 0em;
 	text-align: center;
 	background-color: #EEE;
 }
@@ -49,6 +49,7 @@ body, html {
 
 .controls {
 	background-color: #EEE;
+	margin-bottom: 30px;
 }
 
 .controls__button-wrapper {
@@ -66,4 +67,31 @@ body, html {
 
 .controls__button:hover {
 	background-color: #CCC;
+}
+
+.lap-container {
+	text-align: center;
+	background-color: #EEE;
+	padding: 1em 0em;
+}
+
+.lap-container__list-container {
+	overflow: auto;
+	max-height: 70px;
+}
+
+.lap-container__list {
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+
+.lap-container__list li {
+	counter-increment: lap-counter;
+}
+
+.lap-container__list li::before {
+	content: "#" counter(lap-counter) " ";
+	font-weight: bold;
+	color: #AAA;
 }
