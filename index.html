@@ -8,7 +8,7 @@
 </head>
 <body>
     <div class="container">
-        <div class="menu">
+        <div class="menu main-element-container">
             <div class="menu__tab-wrapper">
                  <div class="menu__tab menu__tab--active">
                     Stopwatch
@@ -18,13 +18,13 @@
                 </div>
             </div>
         </div>
-        <div class="time-view">
+        <div class="time-view main-element-container">
             <span class="time-view__hours">00</span>
             <span class="time-view__minutes">:00</span>
             <span class="time-view__seconds">:00</span>
             <span class="time-view__milliseconds">.000</span>
         </div>
-        <div class="controls">
+        <div class="controls main-element-container">
             <div class="controls controls__button-wrapper">
                 <div class="controls__button">
                     Start/Pause
@@ -34,7 +34,8 @@
                 </div>
             </div>
         </div>
-        <div class="lap-container">
+        <!-- disabled; should be added by javascript, if necessary -->
+        <!-- <div class="lap-container main-element-container">
             <div class="lap-container__list-container">
                 <ol class="lap-container__list">
                     <li>00:00:00.001</li>
@@ -46,7 +47,7 @@
                     <li>00:00:00.007</li>
                 </ol>
             </div>
-        </div>
+        </div> -->
     </div>
     <!-- <h1>Stopwatch</h1>
     <p><span id="stopwatch">00:00:00:000</span></p>
