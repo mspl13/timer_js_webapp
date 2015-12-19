@@ -1,14 +1,23 @@
 /*--------------------------------------------------*/
 /*main document styling*/
 body, html {
-	margin: 0px;
-	padding: 0px;
-	background-color: #FAFAFA;
+    margin: 0px;
+    padding: 0px;
+    background-color: #FAFAFA;
 }
 
 .main-element-container {
-	background-color: #EEE;
-	margin-bottom: 30px;
+    background-color: #EEE;
+    margin-bottom: 30px;
+}
+
+.noselect {
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
 }
 
 /*--------------------------------------------------*/
@@ -17,27 +26,27 @@ body, html {
 /*menu tab wrapper styling for background at too large
 screens*/
 .menu__tab-wrapper {
-	max-width: 500px;
-	display: flex;
-	margin: 0px auto
+    max-width: 500px;
+    display: flex;
+    margin: 0px auto
 }
 
 /*styling for both menu tabs*/
 .menu__tab {
-	flex: 1;
-	padding: 1em;
-	text-align: center;
-	cursor: pointer;
+    flex: 1;
+    padding: 1em;
+    text-align: center;
+    cursor: pointer;
 }
 
 .menu__tab:hover {
-	background-color: #CCC;
+    background-color: #CCC;
 }
 
 /*styling for active menu tabs*/
 .menu__tab--active {
-	box-shadow:inset 0px -5px 0px #CCC;
-	-webkit-box-shadow:inset 0px -5px 0px #CCC;
+    box-shadow:inset 0px -5px 0px #CCC;
+    -webkit-box-shadow:inset 0px -5px 0px #CCC;
     -moz-box-shadow:inset 0px -5px 0px #CCC;
 }
 
@@ -46,18 +55,18 @@ screens*/
 
 /*time view container*/
 .time-view {
-	padding: 4em 0em;
-	text-align: center;
+    padding: 4em 0em;
+    text-align: center;
 }
 
 /*individual time view steps*/
 .time-view__hours, .time-view__minutes, .time-view__seconds {
-	font-size: 3em;
+    font-size: 3em;
 }
 
 /*exta styling for milliseconds (smaller then other numbers*/
 .time-view__milliseconds {
-	font-size: 1.5em;
+    font-size: 1.5em;
 }
 
 /*--------------------------------------------------*/
@@ -66,21 +75,21 @@ screens*/
 /*control button wrapper styling for background at too
 large screens*/
 .controls__button-wrapper {
-	max-width: 500px;
-	display: flex;
-	margin: 0px auto;
+    max-width: 500px;
+    display: flex;
+    margin: 0px auto;
 }
 
 /*control button styling*/
 .controls__button {
-	flex: 1;
-	padding: 1em;
-	text-align: center;
-	cursor: pointer;
+    flex: 1;
+    padding: 1em;
+    text-align: center;
+    cursor: pointer;
 }
 
 .controls__button:hover {
-	background-color: #CCC;
+    background-color: #CCC;
 }
 
 /*--------------------------------------------------*/
@@ -88,32 +97,32 @@ large screens*/
 
 /*main log container*/
 .lap-container {
-	text-align: center;
-	padding: 1em 0em;
-	margin-bottom: 0px;
-	min-height: 90px;
+    text-align: center;
+    padding: 1em 0em;
+    margin-bottom: 0px;
+    min-height: 90px;
 }
 
 /*sub-container to get overflow inside padding*/
 .lap-container__list-container {
-	overflow: auto;
-	max-height: 90px;
+    overflow: auto;
+    max-height: 90px;
 }
 
 /*lap log list*/
 .lap-container__list {
-	margin: 0;
-	padding: 0;
-	list-style: none;
+    margin: 0;
+    padding: 0;
+    list-style: none;
 }
 
 /*lap log list element*/
 .lap-container__list li {
-	counter-increment: lap-counter;
+    counter-increment: lap-counter;
 }
 
 .lap-container__list li::before {
-	content: "#" counter(lap-counter) " ";
-	font-weight: bold;
-	color: #AAA;
+    content: "#" counter(lap-counter) " ";
+    font-weight: bold;
+    color: #AAA;
 }
