@@ -19,10 +19,26 @@
             </div>
         </div>
         <div class="time-view main-element-container">
-            <span class="time-view__hours">00</span>
-            <span class="time-view__minutes">:00</span>
-            <span class="time-view__seconds">:00</span>
-            <span class="time-view__milliseconds">.000</span>
+            <div class="time-view-wrapper">
+                <span class="time-view__hours">00</span>
+                <span class="time-view__minutes">:00</span>
+                <span class="time-view__seconds">:00</span>
+                <span class="time-view__milliseconds">.000</span>
+            </div>
+            <div class="dialpad noselect hide" id="dialpad">
+                <div class="dialpad__wrapper">
+                    <div class="dialpad__number">1</div>
+                    <div class="dialpad__number">2</div>
+                    <div class="dialpad__number">3</div>
+                    <div class="dialpad__number">4</div>
+                    <div class="dialpad__number">5</div>
+                    <div class="dialpad__number">6</div>
+                    <div class="dialpad__number">7</div>
+                    <div class="dialpad__number">8</div>
+                    <div class="dialpad__number">9</div>
+                    <div class="dialpad__number">0</div>
+                </div>
+            </div>
         </div>
         <div class="controls main-element-container">
             <div class="controls controls__button-wrapper">
@@ -74,25 +90,28 @@
         countdownTab = document.getElementById('menu_tab__countdown');
 
         // assign onclick values to menu tabs (changing the timedisplay)
-        stopwatchTab.setAttribute('onclick', 'changeTimeDisplayTo("stopwatch");');
         countdownTab.setAttribute('onclick', 'changeTimeDisplayTo("countdown");');
 
+        // assign dialpad div to variable
+        dialpad = document.getElementById('dialpad');
 
+
+        // --------------------------------------OLD
         // stopwatch
         // assign all DOM elements to variables so they can be used in main javascript
-        stopwatchTimeDisplay = document.getElementById('stopwatch');
-        stopwatchStartButton = document.getElementById('stopwatchStartButton');
-        lapLog = document.getElementById('lapLog');
-        // assign onclick functions to buttons when everything else is finished
-        stopwatchStartButton.setAttribute('onclick', 'startPauseStopwatch();');
-        document.getElementById('stopwatchResetButton').setAttribute('onclick', 'resetStopwatch();');
-        document.getElementById('stopwatchLapButton').setAttribute('onclick',' logLap();');
+        // stopwatchTimeDisplay = document.getElementById('stopwatch');
+        // stopwatchStartButton = document.getElementById('stopwatchStartButton');
+        // lapLog = document.getElementById('lapLog');
+        // // assign onclick functions to buttons when everything else is finished
+        // stopwatchStartButton.setAttribute('onclick', 'startPauseStopwatch();');
+        // document.getElementById('stopwatchResetButton').setAttribute('onclick', 'resetStopwatch();');
+        // document.getElementById('stopwatchLapButton').setAttribute('onclick',' logLap();');
 
-        // countdown
-        countdownStartButton = document.getElementById('countdownStartButton');
-        countdownTimeDisplay = document.getElementById('countdown');
-        countdownStartButton.setAttribute('onclick', 'startPauseCountdown();');
-        document.getElementById('countdownResetButton').setAttribute('onclick', 'resetCountdown();');
+        // // countdown
+        // countdownStartButton = document.getElementById('countdownStartButton');
+        // countdownTimeDisplay = document.getElementById('countdown');
+        // countdownStartButton.setAttribute('onclick', 'startPauseCountdown();');
+        // document.getElementById('countdownResetButton').setAttribute('onclick', 'resetCountdown();');
     </script>
     <script type='text/javascript' id="__bs_script__">//<![CDATA[
     document.write("<script async src='http://HOST:1337/browser-sync/browser-sync-client.2.10.1.js'><\/script>".replace("HOST", location.hostname));

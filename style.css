@@ -21,6 +21,10 @@ body, html {
     user-select: none;
 }
 
+.hide {
+    display: none;
+}
+
 /*--------------------------------------------------*/
 /*menu styling*/
 
@@ -56,7 +60,7 @@ screens*/
 
 /*time view container*/
 .time-view {
-    padding: 4em 0em;
+    padding: 2em 0em;
     text-align: center;
 }
 
@@ -68,6 +72,24 @@ screens*/
 /*exta styling for milliseconds (smaller then other numbers*/
 .time-view__milliseconds {
     font-size: 1.5em;
+}
+
+/*dialpad stylings*/
+.dialpad {
+    max-width: 250px;
+    margin: 1.5em auto 0em auto;
+}
+
+.dialpad__number {
+    display: inline-block;
+    width: 32%;
+    height: 60px;
+    line-height: 60px;
+    vertical-align: middle;
+}
+
+.dialpad__number:hover {
+    background-color: #CCC;
 }
 
 /*--------------------------------------------------*/

@@ -3,6 +3,9 @@
 var stopwatchTab;
 var countdownTab;
 
+// dialpad (to hide/unhide when changing mode)
+var dialpad;
+
 function changeTimeDisplayTo (mode) {
   var menuTabActiveClass = 'menu__tab--active';
 
@@ -12,12 +15,14 @@ function changeTimeDisplayTo (mode) {
       stopwatchTab.classList.add(menuTabActiveClass);
       countdownTab.setAttribute('onclick', 'changeTimeDisplayTo("countdown");');
       stopwatchTab.removeAttribute('onclick');
+      dialpad.classList.add('hide');
       break;
     case 'countdown':
       stopwatchTab.classList.remove(menuTabActiveClass);
       countdownTab.classList.add(menuTabActiveClass);
       stopwatchTab.setAttribute('onclick', 'changeTimeDisplayTo("stopwatch");');
       countdownTab.removeAttribute('onclick');
+      dialpad.classList.remove('hide');
       break;
     default:
       console.error('No mode to switch to...');
