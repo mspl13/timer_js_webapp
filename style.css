@@ -78,6 +78,7 @@ screens*/
 .dialpad {
     max-width: 250px;
     margin: 1.5em auto 0em auto;
+    text-align: right;
 }
 
 .dialpad__number {
@@ -86,6 +87,7 @@ screens*/
     height: 60px;
     line-height: 60px;
     vertical-align: middle;
+    text-align: center;
     /*font-weight: bold;*/
     cursor: pointer;
 }
