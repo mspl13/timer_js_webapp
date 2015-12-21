@@ -81,7 +81,7 @@ function extendTimestringWith (number) {
 
 // takes the timeDisplayString and creates a timestamp out of it by
 // parsing the numbers from it 
-function timifyString () {
+function timeifyString () {
   var timeStringLength = timeDisplayString.length;
   var timeobj = {
     hours: parseInt(timeDisplayString.substr(timeDisplayString.length - 5, 1)),
@@ -93,12 +93,17 @@ function timifyString () {
     + (timeobj.hours * 60 * 60 * 1000);
 };
 
+// deletes the last number from 'timeDisplayString' and updates the
+// time display span element
 function removeLastTypedNumber () {
   timeDisplayString = zeroPad(parseInt(timeDisplayString.slice(0, -1)), 6);
   timedisplay.innerHTML = timeDisplayString
       .replace(/(.{2})/g,":$1")
       .substr(2);
 };
+
+
+
 
 // --------------------------------------------------
 // stopwatch
