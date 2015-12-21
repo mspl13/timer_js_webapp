@@ -76,7 +76,6 @@ function extendTimestringWith (number) {
     timedisplay.innerHTML = timeDisplayString
       .replace(/(.{2})/g,":$1")
       .substr(2);
-    console.log(getCurrentTimeString(timifyString()));
   };
 };
 
@@ -89,10 +88,16 @@ function timifyString () {
     minutes: parseInt(timeDisplayString.substr(timeDisplayString.length - 4, 2)), 
     seconds: parseInt(timeDisplayString.substr(timeDisplayString.length - 2))
   };
-  console.log(timeobj);
 
   return (timeobj.seconds * 1000) + (timeobj.minutes * 60 * 1000)
     + (timeobj.hours * 60 * 60 * 1000);
+};
+
+function removeLastTypedNumber () {
+  timeDisplayString = zeroPad(parseInt(timeDisplayString.slice(0, -1)), 6);
+  timedisplay.innerHTML = timeDisplayString
+      .replace(/(.{2})/g,":$1")
+      .substr(2);
 };
 
 // --------------------------------------------------
