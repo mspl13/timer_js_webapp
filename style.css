@@ -65,7 +65,7 @@ screens*/
 }
 
 /*individual time view steps*/
-.time-view__hours, .time-view__minutes, .time-view__seconds {
+.time-view__timedisplay {
     font-size: 3em;
 }
 
@@ -86,6 +86,8 @@ screens*/
     height: 60px;
     line-height: 60px;
     vertical-align: middle;
+    /*font-weight: bold;*/
+    cursor: pointer;
 }
 
 .dialpad__number:hover {

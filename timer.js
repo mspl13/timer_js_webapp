@@ -1,11 +1,43 @@
 // --------------------------------------------------
-// menu tabs
-var stopwatchTab;
-var countdownTab;
+// important(/global) variables
 
-// dialpad (to hide/unhide when changing mode)
+// span element that contains the time as formatted string
+var timedisplay;
+
+// dialpad container div (to hide/unhide when changing mode)
 var dialpad;
 
+// --------------------------------------------------
+// important functions
+
+// zero-fills the *number* to the given *size* (max. 4 leading zeros)
+function zeroPad (number, size) {
+  var s = "00000" + number;
+  return s.substr(s.length - size);
+};
+
+// returns the time as a string in the format hh:MM:ss:mmm
+// UTC time is used to prevent timezone errors
+function getCurrentTimeString (timestamp) {
+  var date = new Date(timestamp);
+  return zeroPad(date.getUTCHours(), 2)
+    + ':' + zeroPad(date.getUTCMinutes(), 2)
+    + ':' + zeroPad(date.getUTCSeconds(), 2)
+    + ':' + zeroPad(date.getUTCMilliseconds(), 3);
+};
+
+// --------------------------------------------------
+// menu tab functionality
+
+// menu tab to trigger stopwatch mode
+var stopwatchTab;
+
+// menu tab to trigger countdown mode
+var countdownTab;
+
+// changes the timedisplay and menu tabs to the mode required
+// also: changes everything else that changes with the mode (e.g. dialpad)
+// visibility
 function changeTimeDisplayTo (mode) {
   var menuTabActiveClass = 'menu__tab--active';
 
@@ -30,6 +62,40 @@ function changeTimeDisplayTo (mode) {
 };
 
 // --------------------------------------------------
+// dialpad functionality
+
+// timestring that is display (zeropadded) in the timeview
+var timeDisplayString = "";
+
+// extends the timeDisplayString by 'number' and sets it
+// as (time-)formatted string as content of the timeview
+function extendTimestringWith (number) {
+  if (timeDisplayString.charAt(1) == "0" || timeDisplayString == "") {    
+    timeDisplayString = zeroPad(parseInt(timeDisplayString + number), 6);
+    // manipulate DOM to represent new timestring
+    timedisplay.innerHTML = timeDisplayString
+      .replace(/(.{2})/g,":$1")
+      .substr(2);
+    console.log(getCurrentTimeString(timifyString()));
+  };
+};
+
+// takes the timeDisplayString and creates a timestamp out of it by
+// parsing the numbers from it 
+function timifyString () {
+  var timeStringLength = timeDisplayString.length;
+  var timeobj = {
+    hours: parseInt(timeDisplayString.substr(timeDisplayString.length - 5, 1)),
+    minutes: parseInt(timeDisplayString.substr(timeDisplayString.length - 4, 2)), 
+    seconds: parseInt(timeDisplayString.substr(timeDisplayString.length - 2))
+  };
+  console.log(timeobj);
+
+  return (timeobj.seconds * 1000) + (timeobj.minutes * 60 * 1000)
+    + (timeobj.hours * 60 * 60 * 1000);
+};
+
+// --------------------------------------------------
 // stopwatch
 // span that contains the stopwatch; will be set at the end of the html document
 var stopwatchTimeDisplay;
@@ -50,22 +116,6 @@ var stopwatchPauseTimestamp;
 // to update the time span/string
 // it is set when the interval starts
 var stopwatchIntervalId;
-
-// zero-fills the *number* to the given *size* (max. 2 leading zeros)
-function zeroPad (number, size) {
-  var s = "00" + number;
-  return s.substr(s.length-size);
-};
-
-// returns the time as a string in the format hh:MM:ss:mmm
-// UTC time is used to prevent timezone errors
-function getCurrentTimeString (timestamp) {
-  var date = new Date(timestamp);
-  return zeroPad(date.getUTCHours(), 2)
-    + ':' + zeroPad(date.getUTCMinutes(), 2)
-    + ':' + zeroPad(date.getUTCSeconds(), 2)
-    + ':' + zeroPad(date.getUTCMilliseconds(), 3);
-};
 
 // starts/pauses the stopwatch depending on actual state
 function startPauseStopwatch () {

@@ -20,23 +20,24 @@
         </div>
         <div class="time-view main-element-container">
             <div class="time-view-wrapper">
-                <span class="time-view__hours">00</span>
+                <!-- <span class="time-view__hours">00</span>
                 <span class="time-view__minutes">:00</span>
                 <span class="time-view__seconds">:00</span>
-                <span class="time-view__milliseconds">.000</span>
+                <span class="time-view__milliseconds">.000</span> -->
+                <span class="time-view__timedisplay" id="timedisplay">0:00:00</span><span class="time-view__milliseconds">.000</span>
             </div>
-            <div class="dialpad noselect hide" id="dialpad">
+            <div class="dialpad noselect" id="dialpad">
                 <div class="dialpad__wrapper">
-                    <div class="dialpad__number">1</div>
-                    <div class="dialpad__number">2</div>
-                    <div class="dialpad__number">3</div>
-                    <div class="dialpad__number">4</div>
-                    <div class="dialpad__number">5</div>
-                    <div class="dialpad__number">6</div>
-                    <div class="dialpad__number">7</div>
-                    <div class="dialpad__number">8</div>
-                    <div class="dialpad__number">9</div>
-                    <div class="dialpad__number">0</div>
+                    <div class="dialpad__number" onclick="extendTimestringWith(1);">1</div>
+                    <div class="dialpad__number" onclick="extendTimestringWith(2);">2</div>
+                    <div class="dialpad__number" onclick="extendTimestringWith(3);">3</div>
+                    <div class="dialpad__number" onclick="extendTimestringWith(4);">4</div>
+                    <div class="dialpad__number" onclick="extendTimestringWith(5);">5</div>
+                    <div class="dialpad__number" onclick="extendTimestringWith(6);">6</div>
+                    <div class="dialpad__number" onclick="extendTimestringWith(7);">7</div>
+                    <div class="dialpad__number" onclick="extendTimestringWith(8);">8</div>
+                    <div class="dialpad__number" onclick="extendTimestringWith(9);">9</div>
+                    <div class="dialpad__number" onclick="extendTimestringWith(0);">0</div>
                 </div>
             </div>
         </div>
@@ -95,6 +96,8 @@
         // assign dialpad div to variable
         dialpad = document.getElementById('dialpad');
 
+        timedisplay = document.getElementById('timedisplay');
+
 
         // --------------------------------------OLD
         // stopwatch
@@ -114,7 +117,7 @@
         // document.getElementById('countdownResetButton').setAttribute('onclick', 'resetCountdown();');
     </script>
     <script type='text/javascript' id="__bs_script__">//<![CDATA[
-    document.write("<script async src='http://HOST:1337/browser-sync/browser-sync-client.2.10.1.js'><\/script>".replace("HOST", location.hostname));
+    document.write("<script async src='http://HOST:3000/browser-sync/browser-sync-client.2.10.1.js'><\/script>".replace("HOST", location.hostname));
 //]]></script>
 
 </body>
