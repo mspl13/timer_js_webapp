@@ -19,10 +19,10 @@
             </div>
         </div>
         <div class="time-view main-element-container">
-            <div class="time-view-wrapper">
-                <span class="time-view__timedisplay" id="timedisplay">0:00:00</span><span class="time-view__milliseconds">.000</span>
+            <div class="time-view-wrapper" id="timedisplay">
+                <span class="time-view__timedisplay" >0:00:00</span><span class="time-view__milliseconds">.000</span>
             </div>
-            <div class="dialpad noselect" id="dialpad">
+            <div class="dialpad noselect hide" id="dialpad">
                 <div class="dialpad__wrapper">
                     <div class="dialpad__number" onclick="extendTimestringWith(1);">1</div>
                     <div class="dialpad__number" onclick="extendTimestringWith(2);">2</div>
@@ -40,7 +40,7 @@
         </div>
         <div class="controls main-element-container">
             <div class="controls controls__button-wrapper">
-                <div class="controls__button">
+                <div class="controls__button" onclick="startPauseTimer();" id="startPauseButton">
                     Start/Pause
                 </div>
                 <div class="controls__button">
@@ -92,8 +92,10 @@
 
         // assign dialpad div to variable
         dialpad = document.getElementById('dialpad');
-
+        // TODO
         timedisplay = document.getElementById('timedisplay');
+        // TODO
+        startPauseButton = document.getElementById('startPauseButton');
 
 
         // --------------------------------------OLD

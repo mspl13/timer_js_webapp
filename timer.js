@@ -7,6 +7,15 @@ var timedisplay;
 // dialpad container div (to hide/unhide when changing mode)
 var dialpad;
 
+// TODO
+var timerStartTimestamp;
+
+// TODO
+var timerPauseTimestamp;
+
+// TODO
+var startPauseButton;
+
 // --------------------------------------------------
 // important functions
 
@@ -20,10 +29,13 @@ function zeroPad (number, size) {
 // UTC time is used to prevent timezone errors
 function getCurrentTimeString (timestamp) {
   var date = new Date(timestamp);
-  return zeroPad(date.getUTCHours(), 2)
+  var htmlTimeString = '<span class="time-view__timedisplay" id="timedisplay">'
+    + zeroPad(date.getUTCHours(), 2)
     + ':' + zeroPad(date.getUTCMinutes(), 2)
     + ':' + zeroPad(date.getUTCSeconds(), 2)
-    + ':' + zeroPad(date.getUTCMilliseconds(), 3);
+    + '</span><span class="time-view__milliseconds">'
+    + '.' + zeroPad(date.getUTCMilliseconds(), 3) + '</span>';
+  return htmlTimeString;
 };
 
 // --------------------------------------------------
@@ -57,7 +69,7 @@ function changeTimeDisplayTo (mode) {
       dialpad.classList.remove('hide');
       break;
     default:
-      console.error('No mode to switch to...');
+      console.error('No valid mode to switch to...');
   };
 };
 
@@ -70,7 +82,7 @@ var timeDisplayString = "";
 // extends the timeDisplayString by 'number' and sets it
 // as (time-)formatted string as content of the timeview
 function extendTimestringWith (number) {
-  if (timeDisplayString.charAt(1) == "0" || timeDisplayString == "") {    
+  if (timeDisplayString.charAt(1) == "0" || timeDisplayString == "") {
     timeDisplayString = zeroPad(parseInt(timeDisplayString + number), 6);
     // manipulate DOM to represent new timestring
     timedisplay.innerHTML = timeDisplayString
@@ -80,12 +92,13 @@ function extendTimestringWith (number) {
 };
 
 // takes the timeDisplayString and creates a timestamp out of it by
-// parsing the numbers from it 
+// parsing the numbers from it
 function timeifyString () {
   var timeStringLength = timeDisplayString.length;
+  // TODO why work with an object?
   var timeobj = {
     hours: parseInt(timeDisplayString.substr(timeDisplayString.length - 5, 1)),
-    minutes: parseInt(timeDisplayString.substr(timeDisplayString.length - 4, 2)), 
+    minutes: parseInt(timeDisplayString.substr(timeDisplayString.length - 4, 2)),
     seconds: parseInt(timeDisplayString.substr(timeDisplayString.length - 2))
   };
 
@@ -102,56 +115,85 @@ function removeLastTypedNumber () {
       .substr(2);
 };
 
+// --------------------------------------------------
+// main timer functionality
 
+// timerIntervalId is used to identify and stop the interval that is used
+// to update the time span/string
+// it is set when the interval starts
+var timerIntervalId;
 
+function startPauseTimer () {
+  if (!timerStartTimestamp) {
+    timerStartTimestamp = Date.now();
+  };
+  // devide whether 'start' or 'pause' timer
+  if (timerIntervalId) {
+    timerPauseTimestamp = Date.now();
+    window.clearInterval(timerIntervalId);
+    startPauseButton.value = 'Start';
+    timerIntervalId = null;
+  } else {
+    // set everything to pause and log pause time
+    startPauseButton = 'Pause';
+    if (timerPauseTimestamp) {
+      timerStartTimestamp += Date.now() - timerPauseTimestamp;
+      timerPauseTimestamp = null;
+    };
+    timerIntervalId = window.setInterval(function () {
+      timedisplay.innerHTML = getCurrentTimeString(
+        Date.now() - timerStartTimestamp);
+    }, 75);
+  };
+};
 
 // --------------------------------------------------
 // stopwatch
-// span that contains the stopwatch; will be set at the end of the html document
-var stopwatchTimeDisplay;
+// // span that contains the stopwatch; will be set at the end of the html document
+// var stopwatchTimeDisplay;
 
-// main stopwatch button; can have value 'start' and 'pause'
-var stopwatchStartButton;
+// // main stopwatch button; can have value 'start' and 'pause'
+// var stopwatchStartButton;
 
 // logging div for laps
 var lapLog;
 
-// unix timestamp when the stopwatch starts
-var stopwatchStartTimestamp;
+// // unix timestamp when the stopwatch starts
+// var stopwatchStartTimestamp;
 
-// unix timestamp when stopwatch pauses
-var stopwatchPauseTimestamp;
+// // unix timestamp when stopwatch pauses
+// var stopwatchPauseTimestamp;
 
-// stopwatchIntervalId is used to identify and stop the interval that is used
-// to update the time span/string
-// it is set when the interval starts
-var stopwatchIntervalId;
+// // stopwatchIntervalId is used to identify and stop the interval that is used
+// // to update the time span/string
+// // it is set when the interval starts
+// var stopwatchIntervalId;
 
-// starts/pauses the stopwatch depending on actual state
-function startPauseStopwatch () {
-  if (!stopwatchStartTimestamp) {
-    stopwatchStartTimestamp = Date.now();
-  };
-  // decide whether 'start' or 'pause' button was pressed
-  if (stopwatchIntervalId) {
-    stopwatchPauseTimestamp = Date.now();
-    window.clearInterval(stopwatchIntervalId);
-    stopwatchStartButton.value = "Start";
-    stopwatchIntervalId = null;
-  } else {
-    // set everything to pause and log pause time
-    stopwatchStartButton.value = "Pause";
-    if (stopwatchPauseTimestamp) {
-      stopwatchStartTimestamp += Date.now() - stopwatchPauseTimestamp;
-      stopwatchPauseTimestamp = null;
-    };
-    // starting the refresh interval
-    stopwatchIntervalId = window.setInterval(function () {
-      stopwatchTimeDisplay.innerHTML = getCurrentTimeString(
-        Date.now() - stopwatchStartTimestamp);
-    }, 75);
-  };
-};
+// // starts/pauses the stopwatch depending on actual state
+// function startPauseStopwatch () {
+//   if (!stopwatchStartTimestamp) {
+//     stopwatchStartTimestamp = Date.now();
+//   };
+//   // decide whether 'start' or 'pause' button was pressed
+//   if (stopwatchIntervalId) {
+//     stopwatchPauseTimestamp = Date.now();
+//     window.clearInterval(stopwatchIntervalId);
+//     stopwatchStartButton.value = "Start";
+//     stopwatchIntervalId = null;
+//   } else {
+//     // set everything to pause and log pause time
+//     stopwatchStartButton.value = "Pause";
+//     if (stopwatchPauseTimestamp) {
+//       stopwatchStartTimestamp += Date.now() - stopwatchPauseTimestamp;
+//       stopwatchPauseTimestamp = null;
+//     };
+//     // starting the refresh interval
+//     stopwatchIntervalId = window.setInterval(function () {
+//       stopwatchTimeDisplay.innerHTML = getCurrentTimeString(
+//         Date.now() - stopwatchStartTimestamp);
+//     }, 75);
+//   };
+// };
 
 // function to reset the stopwatch to zero so that a new stopwatch can be
 // started
