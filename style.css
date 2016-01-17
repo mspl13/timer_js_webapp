@@ -122,18 +122,18 @@ large screens*/
 /*--------------------------------------------------*/
 /*lap log styling*/
 
-/*main log container*/
+/*main lap container*/
 .lap-container {
+    max-width: 250px;
+    margin: 1.5em auto 0em auto;
     text-align: center;
-    padding: 1em 0em;
-    margin-bottom: 0px;
-    min-height: 90px;
 }
 
 /*sub-container to get overflow inside padding*/
-.lap-container__list-container {
+.lap-container__list-wrapper {
+    /*min-height: 240px;*/ /*maybe uncomment it later*/
+    max-height: 240px;
     overflow: auto;
-    max-height: 90px;
 }
 
 /*lap log list*/
@@ -152,4 +152,9 @@ large screens*/
     content: "#" counter(lap-counter) " ";
     font-weight: bold;
     color: #AAA;
+}
+
+/*reset the font size of lap logs to normal*/
+.lap-container__list li span {
+    font-size: 1em;
 }

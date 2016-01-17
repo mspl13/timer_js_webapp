@@ -14,7 +14,10 @@ var timerStartTimestamp;
 var timerPauseTimestamp;
 
 // TODO
-var startPauseButton;
+var lapButton;
+
+// TODO
+var lapContainer;
 
 // --------------------------------------------------
 // important functions
@@ -60,6 +63,7 @@ function changeTimeDisplayTo (mode) {
       countdownTab.setAttribute('onclick', 'changeTimeDisplayTo("countdown");');
       stopwatchTab.removeAttribute('onclick');
       dialpad.classList.add('hide');
+      lapButton.classList.remove('hide');
       break;
     case 'countdown':
       stopwatchTab.classList.remove(menuTabActiveClass);
@@ -67,6 +71,8 @@ function changeTimeDisplayTo (mode) {
       stopwatchTab.setAttribute('onclick', 'changeTimeDisplayTo("stopwatch");');
       countdownTab.removeAttribute('onclick');
       dialpad.classList.remove('hide');
+      lapButton.classList.add('hide');
+      lapContainer.classList.add('hide');
       break;
     default:
       console.error('No valid mode to switch to...');
@@ -118,11 +124,18 @@ function removeLastTypedNumber () {
 // --------------------------------------------------
 // main timer functionality
 
+// TODO
+var startPauseButton;
+
 // timerIntervalId is used to identify and stop the interval that is used
 // to update the time span/string
 // it is set when the interval starts
 var timerIntervalId;
 
+// TODO
+var lapLog;
+
+// starts/pauses the stopwatch, depending on actual state
 function startPauseTimer () {
   if (!timerStartTimestamp) {
     timerStartTimestamp = Date.now();
@@ -147,80 +160,35 @@ function startPauseTimer () {
   };
 };
 
-// --------------------------------------------------
-// stopwatch
-// // span that contains the stopwatch; will be set at the end of the html document
-// var stopwatchTimeDisplay;
-
-// // main stopwatch button; can have value 'start' and 'pause'
-// var stopwatchStartButton;
-
-// logging div for laps
-var lapLog;
-
-// // unix timestamp when the stopwatch starts
-// var stopwatchStartTimestamp;
-
-// // unix timestamp when stopwatch pauses
-// var stopwatchPauseTimestamp;
-
-// // stopwatchIntervalId is used to identify and stop the interval that is used
-// // to update the time span/string
-// // it is set when the interval starts
-// var stopwatchIntervalId;
-
-// // starts/pauses the stopwatch depending on actual state
-// function startPauseStopwatch () {
-//   if (!stopwatchStartTimestamp) {
-//     stopwatchStartTimestamp = Date.now();
-//   };
-//   // decide whether 'start' or 'pause' button was pressed
-//   if (stopwatchIntervalId) {
-//     stopwatchPauseTimestamp = Date.now();
-//     window.clearInterval(stopwatchIntervalId);
-//     stopwatchStartButton.value = "Start";
-//     stopwatchIntervalId = null;
-//   } else {
-//     // set everything to pause and log pause time
-//     stopwatchStartButton.value = "Pause";
-//     if (stopwatchPauseTimestamp) {
-//       stopwatchStartTimestamp += Date.now() - stopwatchPauseTimestamp;
-//       stopwatchPauseTimestamp = null;
-//     };
-//     // starting the refresh interval
-//     stopwatchIntervalId = window.setInterval(function () {
-//       stopwatchTimeDisplay.innerHTML = getCurrentTimeString(
-//         Date.now() - stopwatchStartTimestamp);
-//     }, 75);
-//   };
-// };
-
-// function to reset the stopwatch to zero so that a new stopwatch can be
-// started
-// only works when the stopwatch were already started
-function resetStopwatch () {
-  if (stopwatchStartTimestamp) {
-    window.clearInterval(stopwatchIntervalId);
-    stopwatchIntervalId = null;
-    stopwatchStartTimestamp = null;
-    stopwatchPauseTimestamp = null;
-    stopwatchTimeDisplay.innerHTML = "00:00:00:000";
-    stopwatchStartButton.value = "Start";
+// TODO
+function resetTimer () {
+  if (timerStartTimestamp) {
+    window.clearInterval(timerIntervalId);
+    timerIntervalId = null;
+    timerStartTimestamp = null;
+    timerPauseTimestamp = null;
+    timedisplay.innerHTML = '<span class="time-view__timedisplay">'
+      + '00:00:00</span>'
+      + '<span class="time-view__milliseconds">.000</span>';
+    startPauseButton.innerHTML = 'Start';
     lapLog.innerHTML = "";
+    lapContainer.classList.add('hide');
   };
-};
+}
 
-// prints the lap time to the logging div
-// only works when stopwatch were already started and is not paused
-function logLap () {
-  if (stopwatchStartTimestamp && !stopwatchPauseTimestamp) {
+// TODO
+function logCurrentLap () {
+  if (timerStartTimestamp && !timerPauseTimestamp) {
+    lapContainer.classList.remove('hide');
     var listNode = document.createElement('li');
-    var lapTime = document.createTextNode(getCurrentTimeString(
-      Date.now() - stopwatchStartTimestamp));
-    listNode.appendChild(lapTime);
+    var lapTime = getCurrentTimeString(Date.now() - timerStartTimestamp);
+    listNode.innerHTML = lapTime;
     lapLog.insertBefore(listNode, lapLog.childNodes[0]);
   };
 };
+
+
+
 
 // --------------------------------------------------
 // countdown

@@ -20,7 +20,7 @@
         </div>
         <div class="time-view main-element-container">
             <div class="time-view-wrapper" id="timedisplay">
-                <span class="time-view__timedisplay" >0:00:00</span><span class="time-view__milliseconds">.000</span>
+                <span class="time-view__timedisplay">00:00:00</span><span class="time-view__milliseconds">.000</span>
             </div>
             <div class="dialpad noselect hide" id="dialpad">
                 <div class="dialpad__wrapper">
@@ -37,43 +37,26 @@
                     <div class="dialpad__number" onclick="removeLastTypedNumber();">D</div>
                 </div>
             </div>
+            <div class="lap-container hide" id="lap-container">
+                <div class="lap-container__list-wrapper">
+                    <ul class="lap-container__list" id="lap-container__list">
+                    </ul>
+                </div>
+            </div>
         </div>
         <div class="controls main-element-container">
             <div class="controls controls__button-wrapper">
-                <div class="controls__button" onclick="startPauseTimer();" id="startPauseButton">
+                <div class="controls__button noselect" id="startPauseButton" onclick="startPauseTimer();">
                     Start
                 </div>
-                <div class="controls__button">
+                <div class="controls__button noselect" id="lapButton" onclick="logCurrentLap();">Lap</div>
+                <div class="controls__button noselect" onclick="resetTimer();">
                     Reset
                 </div>
             </div>
         </div>
-        <!-- disabled; should be added by javascript, if necessary -->
-        <!-- <div class="lap-container main-element-container">
-            <div class="lap-container__list-container">
-                <ol class="lap-container__list">
-                    <li>00:00:00.001</li>
-                    <li>00:00:00.002</li>
-                    <li>00:00:00.003</li>
-                    <li>00:00:00.004</li>
-                    <li>00:00:00.005</li>
-                    <li>00:00:00.006</li>
-                    <li>00:00:00.007</li>
-                </ol>
-            </div>
-        </div> -->
     </div>
-    <!-- <h1>Stopwatch</h1>
-    <p><span id="stopwatch">00:00:00:000</span></p>
-    <input type="button" id="stopwatchStartButton" value="Start" onclick="" />
-    <input type="button" id="stopwatchResetButton" value="Reset" onclick="" />
-    <input type="button" id="stopwatchLapButton" value="Lap" onclick="" />
-    <p>
-        <div style="height: 200px; width: 200px; border: 1px solid black; overflow-y:auto">
-            <ul id="lapLog"></ul>
-        </div>
-    </p>
-    <hr />
+    <!--
     <h1>Countdown</h1>
     <p><span id="countdown">00:00:00:000</span></p>
     <input type="text" id="hoursInput" value="00" />
@@ -96,18 +79,12 @@
         timedisplay = document.getElementById('timedisplay');
         // TODO
         startPauseButton = document.getElementById('startPauseButton');
-
-
-        // --------------------------------------OLD
-        // stopwatch
-        // assign all DOM elements to variables so they can be used in main javascript
-        // stopwatchTimeDisplay = document.getElementById('stopwatch');
-        // stopwatchStartButton = document.getElementById('stopwatchStartButton');
-        // lapLog = document.getElementById('lapLog');
-        // // assign onclick functions to buttons when everything else is finished
-        // stopwatchStartButton.setAttribute('onclick', 'startPauseStopwatch();');
-        // document.getElementById('stopwatchResetButton').setAttribute('onclick', 'resetStopwatch();');
-        // document.getElementById('stopwatchLapButton').setAttribute('onclick',' logLap();');
+        // TODO
+        lapButton = document.getElementById('lapButton');
+        // TODO
+        lapContainer = document.getElementById('lap-container');
+        // TODO
+        lapLog = document.getElementById('lap-container__list');
 
         // // countdown
         // countdownStartButton = document.getElementById('countdownStartButton');
