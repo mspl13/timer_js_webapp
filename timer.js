@@ -131,11 +131,11 @@ function startPauseTimer () {
   if (timerIntervalId) {
     timerPauseTimestamp = Date.now();
     window.clearInterval(timerIntervalId);
-    startPauseButton.value = 'Start';
+    startPauseButton.innerHTML = 'Start';
     timerIntervalId = null;
   } else {
     // set everything to pause and log pause time
-    startPauseButton = 'Pause';
+    startPauseButton.innerHTML = 'Pause';
     if (timerPauseTimestamp) {
       timerStartTimestamp += Date.now() - timerPauseTimestamp;
       timerPauseTimestamp = null;
