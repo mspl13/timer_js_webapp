@@ -1,26 +1,31 @@
 // --------------------------------------------------
 // important(/global) variables
 
-// span element that contains the time as formatted string
+// DOM element that contains the time as formatted string
+// gets assigned at the end of the HTML file
 var timedisplay;
 
 // dialpad container div (to hide/unhide when changing mode)
+// gets assigned at the end of the HTML file
 var dialpad;
 
-// TODO
+// timestamp for stopwatch start and countdown end
 // TODO: rename, doens't fit countdown
 var timerStartTimestamp;
 
-// TODO
+// timestamp when the timer was stopped
 var timerPauseTimestamp;
 
-// TODO
+// DOM element of the start/pause button
+// gets assigned at the end of the HTML file
 var startPauseButton;
 
-// TODO
+// DOM element of the lap button
+// gets assigned at the end of the HTML file
 var lapButton;
 
-// TODO
+// DOM element of the lap container
+// gets assigned at the end of the HTML file
 var lapContainer;
 
 // --------------------------------------------------
@@ -34,6 +39,8 @@ function zeroPad (number, size) {
 
 // returns the time as a string in the format hh:MM:ss:mmm
 // UTC time is used to prevent timezone errors
+// *options* is an object which could contain a timestamp attribute
+// or the time in hours, minutes, seconds and milliseconds
 function getCurrentTimeString (options) {
   // TODO (reafactoring, HTML in JS is not nice...)
   // TODO (refactoring, Object manipulation is expensive;maybe split here again)
@@ -101,7 +108,7 @@ function changeTimeDisplayTo (mode) {
   };
 };
 
-// TODO
+// returns the current active mode as string
 function getActiveMode () {
   if (countdownTab.classList.contains('menu__tab--active')) {
     return 'countdown';
@@ -112,12 +119,12 @@ function getActiveMode () {
 // --------------------------------------------------
 // dialpad functionality
 
-// TODO
+// the already elapsed or still to elapse time as an object
 var timeobject = {
-    hours: '00',
-    minutes: '00',
-    seconds: '00',
-    milliseconds: '00'
+  hours: '00',
+  minutes: '00',
+  seconds: '00',
+  milliseconds: '00'
 };
 
 // extends the timeobject by 'number' and updates the timestring
@@ -144,7 +151,7 @@ function removeLastTypedNumber () {
   timedisplay.innerHTML = getCurrentTimeString(timeobject);
 };
 
-// TODO
+// calculates and returns the milliseconds typed into the timedisplay
 function calcTypedMilliseconds () {
   return (timeobject.hours * 60 * 60 * 1000) + (timeobject.minutes * 60 * 1000)
     + (timeobject.seconds * 1000);
@@ -158,10 +165,11 @@ function calcTypedMilliseconds () {
 // it is set when the interval starts
 var timerIntervalId;
 
-// TODO
+// DOM element for the actual lap log
+// gets assigned at the end of the HTML file
 var lapLog;
 
-// starts/resume the stopwatch
+// starts/resumes the stopwatch
 function startStopwatch () {
   if (!timerStartTimestamp) {
     timerStartTimestamp = Date.now();
@@ -175,7 +183,7 @@ function startStopwatch () {
   }, 75);
 };
 
-// TODO
+// starts/resumes the countdown
 function startCountdown () {
   if (!timerStartTimestamp) {
     timerStartTimestamp = Date.now() + calcTypedMilliseconds();
@@ -195,7 +203,9 @@ function startCountdown () {
   }, 75);
 };
 
-// TODO
+// resets the timer
+// resets all values to the default ones and removes hide classes from
+// DOM elements if necessary
 function resetTimer () {
   window.clearInterval(timerIntervalId);
   timerIntervalId = null;
@@ -219,7 +229,7 @@ function resetTimer () {
   };
 };
 
-// TODO
+// adapts the interface if the timer is started
 function adaptInterface () {
   startPauseButton.innerHTML = 'Pause';
   startPauseButton.setAttribute('onclick', 'pauseTimer();');
@@ -228,7 +238,7 @@ function adaptInterface () {
   };
 };
 
-// TODO
+// pauses the timer and does all the necessary actions for each mode
 function pauseTimer () {
   timerPauseTimestamp = Date.now();
   window.clearInterval(timerIntervalId);
@@ -241,7 +251,7 @@ function pauseTimer () {
   };
 };
 
-// TODO
+// adds the time the timer was on pause to the main timestamp
 function addPauseTime () {
   if (timerPauseTimestamp) {
     timerStartTimestamp += Date.now() - timerPauseTimestamp;
@@ -249,7 +259,7 @@ function addPauseTime () {
   };
 };
 
-// TODO
+// logs the current time as lap to the lap log DOM element
 function logCurrentLap () {
   if (timerStartTimestamp && !timerPauseTimestamp) {
     lapContainer.classList.remove('hide');
