@@ -1,0 +1,160 @@
+/*--------------------------------------------------*/
+/*main document styling*/
+body, html {
+    margin: 0px;
+    padding: 0px;
+    background-color: #FAFAFA;
+    font-family: Helvetica;
+}
+
+.main-element-container {
+    background-color: #EEE;
+    margin-bottom: 30px;
+}
+
+.noselect {
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+.hide {
+    display: none;
+}
+
+/*--------------------------------------------------*/
+/*menu styling*/
+
+/*menu tab wrapper styling for background at too large
+screens*/
+.menu__tab-wrapper {
+    max-width: 500px;
+    display: flex;
+    margin: 0px auto
+}
+
+/*styling for both menu tabs*/
+.menu__tab {
+    flex: 1;
+    padding: 1em;
+    text-align: center;
+    cursor: pointer;
+}
+
+.menu__tab:hover {
+    background-color: #CCC;
+}
+
+/*styling for active menu tabs*/
+.menu__tab--active {
+    box-shadow:inset 0px -5px 0px #CCC;
+    -webkit-box-shadow:inset 0px -5px 0px #CCC;
+    -moz-box-shadow:inset 0px -5px 0px #CCC;
+}
+
+/*--------------------------------------------------*/
+/*time view styling*/
+
+/*time view container*/
+.time-view {
+    padding: 2em 0em;
+    text-align: center;
+}
+
+/*individual time view steps*/
+.time-view__timedisplay {
+    font-size: 3em;
+}
+
+/*exta styling for milliseconds (smaller then other numbers*/
+.time-view__milliseconds {
+    font-size: 1.5em;
+}
+
+/*dialpad stylings*/
+.dialpad {
+    max-width: 250px;
+    margin: 1.5em auto 0em auto;
+    text-align: right;
+}
+
+.dialpad__number {
+    display: inline-block;
+    width: 32%;
+    height: 60px;
+    line-height: 60px;
+    vertical-align: middle;
+    text-align: center;
+    /*font-weight: bold;*/
+    cursor: pointer;
+}
+
+.dialpad__number:hover {
+    background-color: #CCC;
+}
+
+/*--------------------------------------------------*/
+/*control styling*/
+
+/*control button wrapper styling for background at too
+large screens*/
+.controls__button-wrapper {
+    max-width: 500px;
+    display: flex;
+    margin: 0px auto;
+}
+
+/*control button styling*/
+.controls__button {
+    flex: 1;
+    padding: 1em;
+    text-align: center;
+    cursor: pointer;
+}
+
+.controls__button:hover {
+    background-color: #CCC;
+}
+
+/*--------------------------------------------------*/
+/*lap log styling*/
+
+/*main lap container*/
+.lap-container {
+    max-width: 250px;
+    margin: 1.5em auto 0em auto;
+    text-align: center;
+}
+
+/*sub-container to get overflow inside padding*/
+.lap-container__list-wrapper {
+    /*min-height: 240px;*/ /*maybe uncomment it later*/
+    max-height: 240px;
+    overflow: auto;
+}
+
+/*lap log list*/
+.lap-container__list {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+/*lap log list element*/
+.lap-container__list li {
+    counter-increment: lap-counter;
+}
+
+.lap-container__list li::before {
+    content: "#" counter(lap-counter) " ";
+    font-weight: bold;
+    color: #AAA;
+}
+
+/*reset the font size of lap logs to normal*/
+.lap-container__list li span {
+    font-size: 1em;
+}
