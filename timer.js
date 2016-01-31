@@ -10,8 +10,7 @@ var timedisplay;
 var dialpad;
 
 // timestamp for stopwatch start and countdown end
-// TODO: rename, doens't fit countdown
-var timerStartTimestamp;
+var timerStartFinishTimestamp;
 
 // timestamp when the timer was stopped
 var timerPauseTimestamp;
@@ -171,27 +170,27 @@ var lapLog;
 
 // starts/resumes the stopwatch
 function startStopwatch () {
-  if (!timerStartTimestamp) {
-    timerStartTimestamp = Date.now();
+  if (!timerStartFinishTimestamp) {
+    timerStartFinishTimestamp = Date.now();
   };
   adaptInterface();
   addPauseTime();
   timerIntervalId = window.setInterval(function () {
     timedisplay.innerHTML = getCurrentTimeString({
-      timestamp: Date.now() - timerStartTimestamp
+      timestamp: Date.now() - timerStartFinishTimestamp
     });
   }, 75);
 };
 
 // starts/resumes the countdown
 function startCountdown () {
-  if (!timerStartTimestamp) {
-    timerStartTimestamp = Date.now() + calcTypedMilliseconds();
+  if (!timerStartFinishTimestamp) {
+    timerStartFinishTimestamp = Date.now() + calcTypedMilliseconds();
   };
   adaptInterface();
   addPauseTime();
   timerIntervalId = window.setInterval(function () {
-    var countdownTime = timerStartTimestamp - Date.now();
+    var countdownTime = timerStartFinishTimestamp - Date.now();
     if (countdownTime > 0) {
       timedisplay.innerHTML = getCurrentTimeString({
         timestamp: countdownTime
@@ -209,7 +208,7 @@ function startCountdown () {
 function resetTimer () {
   window.clearInterval(timerIntervalId);
   timerIntervalId = null;
-  timerStartTimestamp = null;
+  timerStartFinishTimestamp = null;
   timerPauseTimestamp = null;
   timeobject = {
     hours: '00',
@@ -254,18 +253,18 @@ function pauseTimer () {
 // adds the time the timer was on pause to the main timestamp
 function addPauseTime () {
   if (timerPauseTimestamp) {
-    timerStartTimestamp += Date.now() - timerPauseTimestamp;
+    timerStartFinishTimestamp += Date.now() - timerPauseTimestamp;
     timerPauseTimestamp = null;
   };
 };
 
 // logs the current time as lap to the lap log DOM element
 function logCurrentLap () {
-  if (timerStartTimestamp && !timerPauseTimestamp) {
+  if (timerStartFinishTimestamp && !timerPauseTimestamp) {
     lapContainer.classList.remove('hide');
     var listNode = document.createElement('li');
     var lapTime = getCurrentTimeString({
-      timestamp: Date.now() - timerStartTimestamp
+      timestamp: Date.now() - timerStartFinishTimestamp
     });
     listNode.innerHTML = lapTime;
     lapLog.insertBefore(listNode, lapLog.childNodes[0]);
