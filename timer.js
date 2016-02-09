@@ -41,8 +41,7 @@ function zeroPad (number, size) {
 // *options* is an object which could contain a timestamp attribute
 // or the time in hours, minutes, seconds and milliseconds
 function getCurrentTimeString (options) {
-  // TODO (reafactoring, HTML in JS is not nice...)
-  // TODO (refactoring, Object manipulation is expensive;maybe split here again)
+  // TODO (reafactoring, HTML in JS is not nice...) --> off document HTML
   if (options.timestamp || options.timestamp == 0) {
     var date = new Date(options.timestamp);
     options.hours = date.getUTCHours();
@@ -128,7 +127,6 @@ var timeobject = {
 
 // extends the timeobject by 'number' and updates the timestring
 function extendTimestringWith (number) {
-  // TODO (refactoring)
   if (timeobject.hours.substr(0, 1) == '0') {
     timeobject.hours = timeobject.hours.substr(1)
       + timeobject.minutes.substr(0, 1);
@@ -141,7 +139,6 @@ function extendTimestringWith (number) {
 
 // deletes the last number from timeobject and updates the timestring
 function removeLastTypedNumber () {
-  // TODO (refactoring)
   timeobject.seconds = timeobject.minutes.substr(1)
     + timeobject.seconds.substr(0, 1);
   timeobject.minutes = timeobject.hours.substr(1)
