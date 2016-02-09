@@ -1,11 +1,15 @@
 // --------------------------------------------------
 // important(/global) variables
 
-// DOM element that contains the time as formatted string
+// DOM element that contains/shows the maintime as formatted string
 // gets assigned at the end of the HTML file
-var timedisplay;
+var maintimeDisplay;
 
-// dialpad container div (to hide/unhide when changing mode)
+// DOM element that contains/shows the milliseconds as formatted string
+// gets assigned at the end of the HTML file
+var millisecondDisplay;
+
+// DOM element that contains the dialpad elements
 // gets assigned at the end of the HTML file
 var dialpad;
 
@@ -40,39 +44,36 @@ function zeroPad (number, size) {
 // format: hh:mm:ss.ms
 function getTimeString (timestamp) {
   var date = new Date(timestamp);
-  return zeroPad(date.getUTCHours(), 2)
+  return zeroPad(date.getUTCHours(), 3)
     + ':' + zeroPad(date.getUTCMinutes(), 2)
     + ':' + zeroPad(date.getUTCSeconds(), 2)
     + '.' + zeroPad(date.getUTCMilliseconds(), 3);
 };
 
-// sets the time of the given timestamp in the timedisplay as formatted string
-// (incl. css classes, DOM elements, etc.)
+// sets the timedisplay to the given time as formatted string
 // format: hh:mm:ss.ms
-function printTimedisplayFromTimestamp (timestamp) {
-  // TODO (reafactoring, HTML in JS is not nice...) --> off document HTML
-  var date = new Date(timestamp);
-  var htmlTimeString = '<span class="time-view__timedisplay" id="timedisplay">'
-    + zeroPad(date.getUTCHours(), 2)
-    + ':' + zeroPad(date.getUTCMinutes(), 2)
-    + ':' + zeroPad(date.getUTCSeconds(), 2)
-    + '</span><span class="time-view__milliseconds">'
-    + '.' + zeroPad(date.getUTCMilliseconds(), 3) + '</span>';
-  timedisplay.innerHTML = htmlTimeString;
+function printTimedisplay (hours, minutes, seconds, milliseconds) {
+  maintimeDisplay.innerHTML = hours + ':' + minutes + ':' + seconds;
+  millisecondDisplay.innerHTML = '.' + milliseconds;
 };
 
-// sets the time of the given timeobject in the timedisplay as formatted string
-// (incl. css classes, DOM elements, etc.)
-// format: hh:mm:ss.ms
+// sets the time of the given timestamp in the timedisplay
+function printTimedisplayFromTimestamp (timestamp) {
+  var date = new Date(timestamp);
+  var hours = date.getUTCHours() + (Math.floor(timestamp / 86400000) * 24);
+  printTimedisplay(zeroPad(hours, 3),
+    zeroPad(date.getUTCMinutes(), 2),
+    zeroPad(date.getUTCSeconds(), 2),
+    zeroPad(date.getUTCMilliseconds(), 3));
+};
+
+// sets the time of the given timeobject in the timedisplay
 function printTimedisplayFromTimeobject (timeobject) {
-  var htmlTimeString = '<span class="time-view__timedisplay" id="timedisplay">'
-    + zeroPad(timeobject.hours, 2)
-    + ':' + zeroPad(timeobject.minutes, 2)
-    + ':' + zeroPad(timeobject.seconds, 2)
-    + '</span><span class="time-view__milliseconds">'
-    + '.' + zeroPad(timeobject.milliseconds, 3) + '</span>';
-  timedisplay.innerHTML = htmlTimeString;
-}
+  printTimedisplay(zeroPad(timeobject.hours, 2),
+    zeroPad(timeobject.minutes, 2),
+    zeroPad(timeobject.seconds, 2),
+    zeroPad(timeobject.milliseconds, 3));
+};
 
 // --------------------------------------------------
 // menu tab functionality
@@ -164,11 +165,11 @@ function removeLastTypedNumber () {
 };
 
 // calculates and returns the milliseconds typed into the timedisplay
-function calcTimestamp (timeobject) {
-  return parseInt(timeobject.hours) * 60 * 60 * 1000
-    + parseInt(timeobject.minutes) * 60 * 1000
-    + parseInt(timeobject.seconds) * 1000
-    + parseInt(timeobject.milliseconds);
+function calcTimestamp (timeobjectParam) {
+  return parseInt(timeobjectParam.hours) * 60 * 60 * 1000
+    + parseInt(timeobjectParam.minutes) * 60 * 1000
+    + parseInt(timeobjectParam.seconds) * 1000
+    + parseInt(timeobjectParam.milliseconds);
 };
 
 // --------------------------------------------------
