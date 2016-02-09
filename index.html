@@ -20,7 +20,7 @@
         </div>
         <div class="time-view main-element-container">
             <div class="time-view-wrapper" id="timedisplay">
-                <span class="time-view__timedisplay">00:00:00</span><span class="time-view__milliseconds">.000</span>
+                <span class="time-view__timedisplay" id="maintimeDisplay">000:00:00</span><span class="time-view__milliseconds" id="millisecondDisplay">.000</span>
             </div>
             <div class="dialpad noselect hide" id="dialpad">
                 <div class="dialpad__wrapper">
@@ -68,7 +68,9 @@
         // assigns the DOM element to the variable already set in the js file
         dialpad = document.getElementById('dialpad');
         // assigns the DOM element to the variable already set in the js file
-        timedisplay = document.getElementById('timedisplay');
+        maintimeDisplay = document.getElementById('maintimeDisplay');
+        // assigns the DOM element to the variable already set in the js file
+        millisecondDisplay = document.getElementById('millisecondDisplay');
         // assigns the DOM element to the variable already set in the js file
         startPauseButton = document.getElementById('startPauseButton');
         // assigns the DOM element to the variable already set in the js file
