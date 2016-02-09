@@ -36,27 +36,38 @@ function zeroPad (number, size) {
   return s.substr(s.length - size);
 };
 
-// returns the time as a string in the format hh:MM:ss:mmm
-// UTC time is used to prevent timezone errors
-// *options* is an object which could contain a timestamp attribute
-// or the time in hours, minutes, seconds and milliseconds
-function getCurrentTimeString (options) {
-  // TODO (reafactoring, HTML in JS is not nice...) --> off document HTML
-  if (options.timestamp || options.timestamp == 0) {
-    var date = new Date(options.timestamp);
-    options.hours = date.getUTCHours();
-    options.minutes = date.getUTCMinutes();
-    options.seconds = date.getUTCSeconds();
-    options.milliseconds = date.getUTCMilliseconds();
-  };
-  var htmlTimeString = '<span class="time-view__timedisplay" id="timedisplay">'
-    + zeroPad(options.hours, 2)
-    + ':' + zeroPad(options.minutes, 2)
-    + ':' + zeroPad(options.seconds, 2)
-    + '</span><span class="time-view__milliseconds">'
-    + '.' + zeroPad(options.milliseconds, 3) + '</span>';
-  return htmlTimeString;
+// TODO
+function getTimeString (timestamp) {
+  var date = new Date(timestamp);
+  return zeroPad(date.getUTCHours(), 2)
+    + ':' + zeroPad(date.getUTCMinutes(), 2)
+    + ':' + zeroPad(date.getUTCSeconds(), 2)
+    + '.' + zeroPad(date.getUTCMilliseconds(), 3);
 };
+
+// TODO
+function printTimedisplayFromTimestamp (timestamp) {
+  // TODO (reafactoring, HTML in JS is not nice...) --> off document HTML
+  var date = new Date(timestamp);
+  var htmlTimeString = '<span class="time-view__timedisplay" id="timedisplay">'
+    + zeroPad(date.getUTCHours(), 2)
+    + ':' + zeroPad(date.getUTCMinutes(), 2)
+    + ':' + zeroPad(date.getUTCSeconds(), 2)
+    + '</span><span class="time-view__milliseconds">'
+    + '.' + zeroPad(date.getUTCMilliseconds(), 3) + '</span>';
+  timedisplay.innerHTML = htmlTimeString;
+};
+
+// TODO
+function printTimedisplayFromTimeobject (timeobject) {
+  var htmlTimeString = '<span class="time-view__timedisplay" id="timedisplay">'
+    + zeroPad(timeobject.hours, 2)
+    + ':' + zeroPad(timeobject.minutes, 2)
+    + ':' + zeroPad(timeobject.seconds, 2)
+    + '</span><span class="time-view__milliseconds">'
+    + '.' + zeroPad(timeobject.milliseconds, 3) + '</span>';
+  timedisplay.innerHTML = htmlTimeString;
+}
 
 // --------------------------------------------------
 // menu tab functionality
@@ -133,7 +144,7 @@ function extendTimestringWith (number) {
     timeobject.minutes = timeobject.minutes.substr(1)
       + timeobject.seconds.substr(0, 1);
     timeobject.seconds = timeobject.seconds.substr(1) + number;
-    timedisplay.innerHTML = getCurrentTimeString(timeobject);
+    printTimedisplayFromTimeobject(timeobject);
   };
 };
 
@@ -144,14 +155,16 @@ function removeLastTypedNumber () {
   timeobject.minutes = timeobject.hours.substr(1)
     + timeobject.minutes.substr(0, 1);
   timeobject.hours = '0' + timeobject.hours.substr(0, 1);
-  timedisplay.innerHTML = getCurrentTimeString(timeobject);
+  printTimedisplayFromTimeobject(timeobject);
 };
 
 // calculates and returns the milliseconds typed into the timedisplay
-function calcTypedMilliseconds () {
-  return (timeobject.hours * 60 * 60 * 1000) + (timeobject.minutes * 60 * 1000)
-    + (timeobject.seconds * 1000);
-}
+function calcTimestamp (timeobject) {
+  return parseInt(timeobject.hours) * 60 * 60 * 1000
+    + parseInt(timeobject.minutes) * 60 * 1000
+    + parseInt(timeobject.seconds) * 1000
+    + parseInt(timeobject.milliseconds);
+};
 
 // --------------------------------------------------
 // main timer functionality
@@ -173,25 +186,21 @@ function startStopwatch () {
   adaptInterface();
   addPauseTime();
   timerIntervalId = window.setInterval(function () {
-    timedisplay.innerHTML = getCurrentTimeString({
-      timestamp: Date.now() - timerStartFinishTimestamp
-    });
+    printTimedisplayFromTimestamp(Date.now() - timerStartFinishTimestamp);
   }, 75);
 };
 
 // starts/resumes the countdown
 function startCountdown () {
   if (!timerStartFinishTimestamp) {
-    timerStartFinishTimestamp = Date.now() + calcTypedMilliseconds();
+    timerStartFinishTimestamp = Date.now() + calcTimestamp(timeobject);
   };
   adaptInterface();
   addPauseTime();
   timerIntervalId = window.setInterval(function () {
     var countdownTime = timerStartFinishTimestamp - Date.now();
     if (countdownTime > 0) {
-      timedisplay.innerHTML = getCurrentTimeString({
-        timestamp: countdownTime
-      });
+      printTimedisplayFromTimestamp(countdownTime);
     } else {
       // TODO: play fanfare, etc.
       resetTimer();
@@ -213,7 +222,7 @@ function resetTimer () {
     seconds: '00',
     milliseconds: '00'
   };
-  timedisplay.innerHTML = getCurrentTimeString({timestamp: 0});
+  printTimedisplayFromTimestamp(0);
   startPauseButton.innerHTML = 'Start';
   if (getActiveMode() == 'countdown') {
     startPauseButton.setAttribute('onclick', 'startCountdown();');
@@ -260,9 +269,7 @@ function logCurrentLap () {
   if (timerStartFinishTimestamp && !timerPauseTimestamp) {
     lapContainer.classList.remove('hide');
     var listNode = document.createElement('li');
-    var lapTime = getCurrentTimeString({
-      timestamp: Date.now() - timerStartFinishTimestamp
-    });
+    var lapTime = getTimeString(Date.now() - timerStartFinishTimestamp);
     listNode.innerHTML = lapTime;
     lapLog.insertBefore(listNode, lapLog.childNodes[0]);
   };
