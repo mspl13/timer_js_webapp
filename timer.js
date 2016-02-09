@@ -98,8 +98,6 @@ function printTimedisplayFromTimestamp (timestamp) {
   // milliseconds
   var milliseconds = timestamp;
 
-  // var date = new Date(timestamp);
-  // var hours = date.getUTCHours() + (Math.floor(timestamp / 86400000) * 24);
   printTimedisplay(zeroPad(hours, 3),
     zeroPad(minutes, 2),
     zeroPad(seconds, 2),
