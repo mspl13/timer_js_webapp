@@ -153,8 +153,3 @@ large screens*/
     font-weight: bold;
     color: #AAA;
 }
-
-/*reset the font size of lap logs to normal*/
-.lap-container__list li span {
-    font-size: 1em;
-}
