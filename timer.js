@@ -43,11 +43,30 @@ function zeroPad (number, size) {
 // returns the time of the given timestamp as a formatted string
 // format: hh:mm:ss.ms
 function getTimeString (timestamp) {
-  var date = new Date(timestamp);
-  return zeroPad(date.getUTCHours(), 3)
-    + ':' + zeroPad(date.getUTCMinutes(), 2)
-    + ':' + zeroPad(date.getUTCSeconds(), 2)
-    + '.' + zeroPad(date.getUTCMilliseconds(), 3);
+  // days
+  var days = Math.floor(timestamp / 86400000);
+  timestamp -= days * 86400000;
+
+  // hours
+  var hours = Math.floor(timestamp / 3600000);
+  timestamp -= hours * 3600000;
+  hours += days * 24;
+
+  // minutes
+  var minutes = Math.floor(timestamp / 60000);
+  timestamp -= minutes * 60000;
+
+  // seconds
+  var seconds = Math.floor(timestamp / 1000);
+  timestamp -= seconds * 1000;
+
+  // milliseconds
+  var milliseconds = timestamp;
+
+  return zeroPad(hours, 3)
+    + ':' + zeroPad(minutes, 2)
+    + ':' + zeroPad(seconds, 2)
+    + '.' + zeroPad(milliseconds, 3);
 };
 
 // sets the timedisplay to the given time as formatted string
@@ -59,12 +78,32 @@ function printTimedisplay (hours, minutes, seconds, milliseconds) {
 
 // sets the time of the given timestamp in the timedisplay
 function printTimedisplayFromTimestamp (timestamp) {
-  var date = new Date(timestamp);
-  var hours = date.getUTCHours() + (Math.floor(timestamp / 86400000) * 24);
+  // days
+  var days = Math.floor(timestamp / 86400000);
+  timestamp -= days * 86400000;
+
+  // hours
+  var hours = Math.floor(timestamp / 3600000);
+  timestamp -= hours * 3600000;
+  hours += days * 24;
+
+  // minutes
+  var minutes = Math.floor(timestamp / 60000);
+  timestamp -= minutes * 60000;
+
+  // seconds
+  var seconds = Math.floor(timestamp / 1000);
+  timestamp -= seconds * 1000;
+
+  // milliseconds
+  var milliseconds = timestamp;
+
+  // var date = new Date(timestamp);
+  // var hours = date.getUTCHours() + (Math.floor(timestamp / 86400000) * 24);
   printTimedisplay(zeroPad(hours, 3),
-    zeroPad(date.getUTCMinutes(), 2),
-    zeroPad(date.getUTCSeconds(), 2),
-    zeroPad(date.getUTCMilliseconds(), 3));
+    zeroPad(minutes, 2),
+    zeroPad(seconds, 2),
+    zeroPad(milliseconds, 3));
 };
 
 // sets the time of the given timeobject in the timedisplay
