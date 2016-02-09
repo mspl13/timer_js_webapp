@@ -36,7 +36,8 @@ function zeroPad (number, size) {
   return s.substr(s.length - size);
 };
 
-// TODO
+// returns the time of the given timestamp as a formatted string
+// format: hh:mm:ss.ms
 function getTimeString (timestamp) {
   var date = new Date(timestamp);
   return zeroPad(date.getUTCHours(), 2)
@@ -45,7 +46,9 @@ function getTimeString (timestamp) {
     + '.' + zeroPad(date.getUTCMilliseconds(), 3);
 };
 
-// TODO
+// sets the time of the given timestamp in the timedisplay as formatted string
+// (incl. css classes, DOM elements, etc.)
+// format: hh:mm:ss.ms
 function printTimedisplayFromTimestamp (timestamp) {
   // TODO (reafactoring, HTML in JS is not nice...) --> off document HTML
   var date = new Date(timestamp);
@@ -58,7 +61,9 @@ function printTimedisplayFromTimestamp (timestamp) {
   timedisplay.innerHTML = htmlTimeString;
 };
 
-// TODO
+// sets the time of the given timeobject in the timedisplay as formatted string
+// (incl. css classes, DOM elements, etc.)
+// format: hh:mm:ss.ms
 function printTimedisplayFromTimeobject (timeobject) {
   var htmlTimeString = '<span class="time-view__timedisplay" id="timedisplay">'
     + zeroPad(timeobject.hours, 2)
