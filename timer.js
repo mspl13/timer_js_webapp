@@ -217,6 +217,10 @@ function calcTimestamp (timeobjectParam) {
 // it is set when the interval starts
 var timerIntervalId;
 
+// DOM element for the lap log wrapper
+// gets assigned at the end of the HTML file
+var lapListWrapper;
+
 // DOM element for the actual lap log
 // gets assigned at the end of the HTML file
 var lapLog;
@@ -314,6 +318,7 @@ function logCurrentLap () {
     var listNode = document.createElement('li');
     var lapTime = getTimeString(Date.now() - timerStartFinishTimestamp);
     listNode.innerHTML = lapTime;
-    lapLog.insertBefore(listNode, lapLog.childNodes[0]);
+    lapLog.appendChild(listNode);
+    lapListWrapper.scrollTop = lapListWrapper.scrollHeight;
   };
 };
