@@ -34,6 +34,11 @@ var lapContainer;
 // --------------------------------------------------
 // important functions
 
+// updates the page title to the given string and adds ' - timer_js'
+function updatePageTitle (string) {
+  document.title = string + ' - timer_js';
+};
+
 // zero-fills the *number* to the given *size* (max. 6 leading zeros)
 function zeroPad (number, size) {
   var s = "000000" + number;
@@ -63,7 +68,7 @@ function getTimeString (timestamp) {
   // milliseconds
   var milliseconds = timestamp;
 
-  return zeroPad(hours, 3)
+  return zeroPad(hours, 2)
     + ':' + zeroPad(minutes, 2)
     + ':' + zeroPad(seconds, 2)
     + '.' + zeroPad(milliseconds, 3);
@@ -217,6 +222,11 @@ function calcTimestamp (timeobjectParam) {
 // it is set when the interval starts
 var timerIntervalId;
 
+// pageTitleIntervallId id used to identify and stop the interval that is used
+// to update the time in the page title
+// it is set when the interval starts
+var pageTitleIntervallId;
+
 // DOM element for the lap log wrapper
 // gets assigned at the end of the HTML file
 var lapListWrapper;
@@ -235,6 +245,10 @@ function startStopwatch () {
   timerIntervalId = window.setInterval(function () {
     printTimedisplayFromTimestamp(Date.now() - timerStartFinishTimestamp);
   }, 75);
+  pageTitleIntervallId = window.setInterval(function () {
+    updatePageTitle(getTimeString(
+      Date.now() - timerStartFinishTimestamp).substr(0, 8));
+  }, 1000);
 };
 
 // starts/resumes the countdown
@@ -253,6 +267,10 @@ function startCountdown () {
       resetTimer();
     };
   }, 75);
+  pageTitleIntervallId = window.setInterval(function () {
+    updatePageTitle(getTimeString(
+      timerStartFinishTimestamp - Date.now()).substr(0, 8));
+  }, 1000);
 };
 
 // resets the timer
@@ -261,6 +279,8 @@ function startCountdown () {
 function resetTimer () {
   window.clearInterval(timerIntervalId);
   timerIntervalId = null;
+  window.clearInterval(pageTitleIntervallId);
+  pageTitleIntervallId = null;
   timerStartFinishTimestamp = null;
   timerPauseTimestamp = null;
   timeobject = {
@@ -274,10 +294,12 @@ function resetTimer () {
   if (getActiveMode() == 'countdown') {
     startPauseButton.setAttribute('onclick', 'startCountdown();');
     dialpad.classList.remove('hide');
+    updatePageTitle('Countdown');
   } else if (getActiveMode() == 'stopwatch') {
     startPauseButton.setAttribute('onclick', 'startStopwatch();');
-    lapLog.innerHTML = "";
     lapContainer.classList.add('hide');
+    updatePageTitle('Stopwatch');
+    lapLog.innerHTML = "";
   };
 };
 
@@ -294,8 +316,10 @@ function adaptInterface () {
 function pauseTimer () {
   timerPauseTimestamp = Date.now();
   window.clearInterval(timerIntervalId);
-  startPauseButton.innerHTML = 'Start';
   timerIntervalId = null;
+  window.clearInterval(pageTitleIntervallId);
+  pageTitleIntervallId = null;
+  startPauseButton.innerHTML = 'Start';
   if (getActiveMode() == 'countdown') {
     startPauseButton.setAttribute('onclick', 'startCountdown();');
   } else if (getActiveMode() == 'stopwatch') {
