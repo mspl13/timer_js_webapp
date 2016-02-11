@@ -340,8 +340,7 @@ function logCurrentLap () {
   if (timerStartFinishTimestamp && !timerPauseTimestamp) {
     lapContainer.classList.remove('hide');
     var listNode = document.createElement('li');
-    var lapTime = getTimeString(Date.now() - timerStartFinishTimestamp);
-    listNode.innerHTML = lapTime;
+    listNode.innerHTML = getTimeString(Date.now() - timerStartFinishTimestamp);
     lapLog.appendChild(listNode);
     lapListWrapper.scrollTop = lapListWrapper.scrollHeight;
   };
