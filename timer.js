@@ -1,4 +1,6 @@
 // --------------------------------------------------
+// version: 1.0.0
+// --------------------------------------------------
 // important(/global) variables
 
 // DOM element that contains/shows the maintime as formatted string
