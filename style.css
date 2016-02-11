@@ -88,7 +88,6 @@ screens*/
     line-height: 60px;
     vertical-align: middle;
     text-align: center;
-    /*font-weight: bold;*/
     cursor: pointer;
 }
 
@@ -131,7 +130,6 @@ large screens*/
 
 /*sub-container to get overflow inside padding*/
 .lap-container__list-wrapper {
-    /*min-height: 240px;*/ /*maybe uncomment it later*/
     max-height: 240px;
     overflow: auto;
 }
